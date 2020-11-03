@@ -1,0 +1,51 @@
+html, body {
+    height: 100%;
+    background-color: black;
+}
+
+body {
+    display: flex;
+}
+
+li {
+    /* padding: 5%; */
+    outline-style: dashed;
+    outline-color: lightslategray;
+}
+
+.left-bar {
+    background-color: lightblue;
+    width: 13%;
+    margin: 2%;
+}
+
+.left-bar li {
+    height: 33.33%;
+}
+
+.center-bar {
+    background-color: lightgoldenrodyellow;
+    width: 68%;
+    margin: 2% 0%;
+}
+
+.main-bar {
+    display: flex;
+    background-color: lightcoral;
+    height: 20%;
+}
+
+.main-bar li {
+    width: 50%;
+}
+
+.main-screen {
+    background-color: lightsalmon;
+    height: 80%
+}
+
+.right-bar {
+    background-color: lightgreen;
+    width: 13%;
+    margin: 2%;
+}
