@@ -10,6 +10,10 @@ class GameView {
         this.handleMove = this.handleMove.bind(this);
         // handles character movement
         window.addEventListener('keydown', this.handleMove)
+
+        window.character = this.board.character
+        window.shield = this.board.shield
+        window.board = this.board
     }
     
     setupGame() {
@@ -43,15 +47,35 @@ class GameView {
 
         if (GameView.KEYS[e.keyCode] === this.board.character.directionFaced) {
             debugger
-            this.board.character.positionX = this.board.character.positionX - 1
+
+            let newPos
+
+            if (GameView.KEYS[e.keyCode] === "W" || GameView.KEYS[e.keyCode] === "E") {
+                newPos = this.board.character.positionX - 1
+                if (newPos >= 0 && newPos <= 15) {
+                    this.board.character.positionX = newPos
+                }
+            } else {
+                newPos = this.board.character.positionY - 1
+                if (newPos >= 0 && newPos <= 15) {
+                    this.board.character.positionY = newPos
+                }
+            }
+
         } else {
             debugger
-            this.board.character.directionFaced = GameView.KEYS[e.keyCode]
+
+            let newDirFaced = GameView.KEYS[e.keyCode]
+            this.board.character.directionFaced = newDirFaced
         }
 
         debugger
 
         // at this point, we would call render to re-render the board and updated state
+    }
+
+    isValidMove() {
+
     }
 
     render() {
