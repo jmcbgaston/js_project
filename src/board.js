@@ -4,8 +4,6 @@ const Shield = require('./shield.js')
 
 class Board {
     constructor() {
-        debugger
-
         let grid = new Array(16)
 
         for (let i = 0; i < grid.length; i++) {
@@ -23,6 +21,3 @@ class Board {
 }
 
 module.exports = Board
-
-// let board = new Board()
-// console.log(board.grid[7][15])

@@ -1,6 +1,5 @@
 class Character {
     constructor() {
-        debugger
         this.directionFaced = "W"
         this.shielded = false
         this.shield = null
@@ -10,11 +9,3 @@ class Character {
 }
 
 module.exports = Character
-
-// Character object
-// - starts game facing west
-// - has shielded status
-// - .shield will hold Shield object
-
-// let char = new Character
-// console.log(char)
