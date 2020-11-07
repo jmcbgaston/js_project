@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="./reset.css" rel="stylesheet">
         <link href="./index.css" rel="stylesheet">
-        <script src="./main.js"></script>
+        <script src="./dist/main.js"></script>
     </head>        
     <body>
 
@@ -19,15 +19,19 @@
         <ul class="center-bar">
             <ul class="main-bar">
                 <li>Game details</li>
-                <li>Game options</li>
+                
+                <li>
+                    <button id="play-button">play</button>
+                    <button id="pause-button">mute</button>
+                    <audio id="audio" src="./retro.mp3"></audio>
+                </li>
+                <!-- <li>Game options</li> -->
             </ul>
             <ul class="main-screen">
-                <li>
-                    <button onclick="startGame()">Start</button>
-                    <button onclick="play()">play</button>
-                    <audio id="audio" src="./retro.mp3"></audio>
-                    <button onclick="pause()">mute</button>
-                </li>
+                <figure class="shield-hero-game">
+                    <button id="start-button">Start</button>
+
+                </figure>
             </ul>
         </ul>
 
