@@ -8,12 +8,20 @@ body {
 }
 
 li {
+    position: relative;
     display: flex;
     justify-content: center;
     flex-direction: column;
     text-align: center;
     outline-style: dashed;
     outline-color: lightslategray;
+}
+
+canvas {
+    position: absolute;
+    /* background-color: lightsalmon; */
+    width: 30px;
+    height: 30px;
 }
 
 .left-bar {
@@ -49,6 +57,7 @@ li {
 }
 
 .main-screen {
+    position: relative;
     display: flex;
     justify-content: center;
     background-color: lightsalmon;
@@ -58,13 +67,14 @@ li {
 
 .shield-hero-game {
     background-color: yellow;
-    display: flex;
+    /* display: flex; */
     width: 624px;
     height: 624px;
 }
 
 .main-screen ul {
-    width: 80%;
+    /* width: 80%; */
+    display: flex;
     /* height: 80%; */
 }
 

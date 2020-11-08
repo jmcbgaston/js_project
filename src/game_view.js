@@ -8,7 +8,7 @@ class GameView {
 
         this.setupGame();
         window.addEventListener('keydown', this.handleMove)
-
+        
         window.character = this.board.character
         window.shield = this.board.shield
         window.board = this.board
@@ -19,18 +19,32 @@ class GameView {
         for (let i = 0; i < this.board.grid.length; i++) {
             html += "<ul>";
             for (let j = 0; j < this.board.grid.length; j++) {
-                html += "<li class='shield'></li>";
+                let id = [i, j]
+                let idX = i
+                let idY = j
+
+                if (idX === 7 && idY === 8) {
+                    html += `<li id=${id} class="character"><canvas id='canvas-character'></canvas></li>`
+                } else if (idX === 7 && idY === 7) {
+                    html += `<li id=${id} class="shield"><canvas id='canvas-shield'></canvas></li>`
+                } else {
+                    html += `<li id=${id}><canvas></canvas></li>`
+                }
             }
             html += "</ul>";
         }
-
         this.element.innerHTML = html;
-        this.placeElements()
+        this.createCanvasCharacter();
     }
-    
-    placeElements() {
-        this.board.grid[8][9] = this.board.character
-        this.board.grid[6][9] = this.board.shield
+
+    createCanvasCharacter() {
+        const canvasCharacter = document.getElementById('canvas-character')
+        canvasCharacter.width = 30;
+        canvasCharacter.height = 30;
+
+        const ctx = canvasCharacter.getContext('2d')
+        ctx.fillStyle = "beige";
+        ctx.fillRect(0, 0, 25, 25);
     }
     
     handleMove(e) {
@@ -39,38 +53,58 @@ class GameView {
         if (GameView.KEYS[e.keyCode] === this.board.character.directionFaced) {
             let newPos
 
-            if (GameView.KEYS[e.keyCode] === "W" || GameView.KEYS[e.keyCode] === "E") {
+            if (GameView.KEYS[e.keyCode] === "N") {
                 newPos = this.board.character.positionX - 1
                 if (newPos >= 0 && newPos <= 15) {
                     this.board.character.positionX = newPos
+                    this.updateClasses()
                 }
-            } else {
+            } else if (GameView.KEYS[e.keyCode] === "S") {
+                newPos = this.board.character.positionX + 1
+                if (newPos >= 0 && newPos <= 15) {
+                    this.board.character.positionX = newPos
+                    this.updateClasses()
+                }
+            } else if (GameView.KEYS[e.keyCode] === "E") {
+                newPos = this.board.character.positionY + 1
+                if (newPos >= 0 && newPos <= 15) {
+                    this.board.character.positionY = newPos
+                    this.updateClasses()
+                }
+            } else if (GameView.KEYS[e.keyCode] === "W") {
                 newPos = this.board.character.positionY - 1
                 if (newPos >= 0 && newPos <= 15) {
                     this.board.character.positionY = newPos
+                    this.updateClasses()
                 }
+            } else {
+            
             }
-
+            
         } else {
             let newDirFaced = GameView.KEYS[e.keyCode]
             this.board.character.directionFaced = newDirFaced
         }
-
-        this.updateClasses()
     }
 
     updateClasses() {
-        debugger;
-
         this.removeClasses();
+        let characterCoordinates = [this.board.character.positionX, this.board.character.positionY];
+        let charAtTag = document.getElementById(characterCoordinates);
+        charAtTag.classList.add('character');
+
+        charAtTag.firstElementChild.id = 'canvas-character'
+        this.createCanvasCharacter()
     }
 
     removeClasses() {
-        debugger;
-
         document.querySelectorAll('li').forEach(liEle => {
-            liEle.classList.remove('shield')
             liEle.classList.remove('character')
+            liEle.classList.remove('shield')
+        })
+        document.querySelectorAll('canvas').forEach(caEle => {
+            caEle.id = ""
+            caEle.getContext('2d').clearRect(0, 0, 30, 30)
         })
     }
 

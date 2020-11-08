@@ -11,9 +11,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function startGame() {
     const rootElement = document.querySelector('.shield-hero-game');
-    let newGame = new GameView(rootElement)
-    return newGame
+    new GameView(rootElement)
+    // let newGame = new GameView(rootElement)
+    // return newGame
 }
+
+// const canvasEl = document.getElementsByClassName("canvas-character");
+// debugger
+// canvasEl.width = 500;
+// canvasEl.height = 500;
+
+// const ctx = canvasEl.getContext("2d");
+// debugger
+// ctx.fillStyle = "purple";
+// ctx.fillRect(0, 0, 20, 20);
 
 function play() {
     const audio = document.getElementById('audio')

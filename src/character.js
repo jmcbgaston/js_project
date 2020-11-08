@@ -3,8 +3,8 @@ class Character {
         this.directionFaced = "W"
         this.shielded = false
         this.shield = null
-        this.positionX = 8
-        this.positionY = 7
+        this.positionX = 7
+        this.positionY = 8
     }
 }
 
