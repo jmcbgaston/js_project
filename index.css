@@ -69,11 +69,14 @@ canvas {
 
 .shield-hero-game {
     background-color: yellow;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     width: 600px;
     height: 600px;
+}
+
+.shield-hero-game button {
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
 }
 
 .main-screen ul {
