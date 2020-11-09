@@ -1,10 +1,12 @@
 const Board = require('./board.js')
+const FireBall = require('./fireball')
 
 class GameView {
     constructor(element) {
         this.element = element
         this.board = new Board();
         this.handleMove = this.handleMove.bind(this);
+        this.gameStarted = false
 
         this.setupGame();
         window.addEventListener('keydown', this.handleMove)
@@ -67,6 +69,20 @@ class GameView {
         ctx.fillStyle = "blue";
         ctx.fillRect(0, 0, 25, 25);
     }
+
+    createCanvasFireball(fireball) {
+        // const canvasFireball = document.getElementById('canvas-fireball')
+        fireball.width = 20;
+        fireball.height = 20;
+
+        const ctx = fireball.getContext('2d')
+
+        ctx.beginPath();
+        ctx.arc(0, 0, 20, 1, 1*Math.PI);
+        ctx.stroke();
+        ctx.fillStyle = "red";
+        ctx.fill();
+    }
     
     handleMove(e) {
         e.preventDefault;
@@ -76,25 +92,25 @@ class GameView {
 
             if (GameView.KEYS[e.keyCode] === "N") {
                 newPos = this.board.character.positionX - 1
-                if (newPos >= 0 && newPos <= 15) {
+                if (newPos > 0 && newPos < 15) {
                     this.board.character.positionX = newPos
                     this.updateClasses()
                 }
             } else if (GameView.KEYS[e.keyCode] === "S") {
                 newPos = this.board.character.positionX + 1
-                if (newPos >= 0 && newPos <= 15) {
+                if (newPos > 0 && newPos < 15) {
                     this.board.character.positionX = newPos
                     this.updateClasses()
                 }
             } else if (GameView.KEYS[e.keyCode] === "E") {
                 newPos = this.board.character.positionY + 1
-                if (newPos >= 0 && newPos <= 15) {
+                if (newPos > 0 && newPos < 15) {
                     this.board.character.positionY = newPos
                     this.updateClasses()
                 }
             } else if (GameView.KEYS[e.keyCode] === "W") {
                 newPos = this.board.character.positionY - 1
-                if (newPos >= 0 && newPos <= 15) {
+                if (newPos > 0 && newPos < 15) {
                     this.board.character.positionY = newPos
                     this.updateClasses()
                 }
@@ -108,9 +124,42 @@ class GameView {
         }
     }
 
+    generateFireballs() {
+        if (this.gameStarted) {
+            let randomPos1 = [0, Math.floor(Math.random() * Math.floor(15))];
+            let ele1 = document.getElementById(randomPos1)
+            let fireball1 = ele1.firstElementChild
+            fireball1.id = randomPos1
+            // debugger
+            this.createCanvasFireball(fireball1)
+            
+            let randomPos2 = [Math.floor(Math.random() * Math.floor(15)), 0];
+            let ele2 = document.getElementById(randomPos2)
+            let fireball2 = ele2.firstElementChild
+            fireball2.id = randomPos2
+            // debugger
+            this.createCanvasFireball(fireball2)
+            
+            let randomPos3 = [15, Math.floor(Math.random() * Math.floor(15))];
+            let ele3 = document.getElementById(randomPos3)
+            let fireball3 = ele3.firstElementChild
+            fireball3.id = randomPos3
+            // debugger
+            this.createCanvasFireball(fireball3)
+            
+            let randomPos4 = [Math.floor(Math.random() * Math.floor(15)), 15];
+            let ele4 = document.getElementById(randomPos4)
+            let fireball4 = ele4.firstElementChild
+            fireball4.id = randomPos4
+            // debugger
+            this.createCanvasFireball(fireball4)
+            this.gameStarted = false
+        }
+    }
+        
     updateClasses() {
         this.removeClasses();
-
+        
         let characterCoordinates = [this.board.character.positionX, this.board.character.positionY];
         let shieldCoordinates = [this.board.shield.positionX, this.board.shield.positionY];
         
@@ -138,7 +187,22 @@ class GameView {
             shieldedCharAtTag.firstElementChild.id = 'canvas-shielded-character'
             
             this.createCanvasShieldedCharacter()
+            this.generateFireballs()
+            this.gameStarted = true
+
+            // not definite placement
+            // this.play()
+            // -------- //
         }
+
+        if (this.gameStarted) {
+            // this.animateFireballs()
+        }
+    }
+
+    play() {
+        const audio = document.getElementById('audio')
+        audio.play();
     }
 
     removeClasses() {
@@ -156,6 +220,7 @@ class GameView {
     createNewShield() {
 
     }
+
     damageShield() {
 
     }
