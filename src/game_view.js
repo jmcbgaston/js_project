@@ -147,25 +147,16 @@ class GameView {
             
             this.createCanvasShieldedCharacter()
             this.generateFireballs()
-            // this.gameStarted = true
-            // not definite placement
-            // this.play()
-            // -------- //
         }
-
-        // if (this.gameStarted) {
-        // }
     }
     
     generateFireballs() {
         if (!this.gameStarted) {
-            // debugger
             let randomPos1 = [0, Math.floor(Math.random() * Math.floor(15))];
             let ele1 = document.getElementById(randomPos1)
             let fireball1 = ele1.firstElementChild
             fireball1.id = randomPos1
             this.fireball1 = fireball1
-            // debugger
             this.createCanvasFireball(fireball1)
             
             let randomPos2 = [Math.floor(Math.random() * Math.floor(15)), 0];
@@ -173,7 +164,6 @@ class GameView {
             let fireball2 = ele2.firstElementChild
             fireball2.id = randomPos2
             this.fireball2 = fireball2
-            // debugger
             this.createCanvasFireball(fireball2)
             
             let randomPos3 = [15, Math.floor(Math.random() * Math.floor(15))];
@@ -181,7 +171,6 @@ class GameView {
             let fireball3 = ele3.firstElementChild
             fireball3.id = randomPos3
             this.fireball3 = fireball3
-            // debugger
             this.createCanvasFireball(fireball3)
             
             let randomPos4 = [Math.floor(Math.random() * Math.floor(15)), 15];
@@ -189,7 +178,6 @@ class GameView {
             let fireball4 = ele4.firstElementChild
             fireball4.id = randomPos4
             this.fireball4 = fireball4
-            // debugger
             this.createCanvasFireball(fireball4)
             this.gameStarted = true
         }
@@ -230,7 +218,6 @@ class GameView {
                 caEle.getContext('2d').clearRect(0, 0, 30, 30)
             }
         })
-        // debugger
     }
 
     createNewShield() {

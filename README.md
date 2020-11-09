@@ -1,9 +1,22 @@
-# js_project
+# Shield Hero
+![LIVE](https://jmcbgaston.github.io/shield_hero/)
 
-- Link to live version.
 - Instructions on how to play/interact with the project.
-- List of techs/languages/plugins/APIs used.
-- Technical implementation details with code snippets (make sure it looks good).
-- To-dos/future features.
-- No .DS_Stores / debuggers / console.logs.
-- Organize into /assets and /lib.
+### Instructions
+- The game is simple
+- Use the arrow keys to go North, South, East and West
+- Dodge incoming projectiles by moving out of their way
+- Block incoming projectiles if you cannot escape their path by facing your shield onto the projectiles direction
+- The longer you survive, the better your score
+
+### Technologies
+- This game is built with vanilla Javascript
+   - JS handles the game logic as well as what is to be rendered utilizing canvas elements
+- CSS is used to handle aesthetics of the html page as well as proper positioning
+- Event listeners are used to pick up on user input, which moves the player around the grid
+
+### Technical Implementation
+- tbd
+
+### To-dos and Future features
+- tbd
