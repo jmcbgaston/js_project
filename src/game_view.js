@@ -57,6 +57,16 @@ class GameView {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, 25, 25);
     }
+
+    createCanvasShieldedCharacter() {
+        const canvasShieldedCharacter = document.getElementById('canvas-shielded-character')
+        canvasShieldedCharacter.width = 30;
+        canvasShieldedCharacter.height = 30;
+
+        const ctx = canvasShieldedCharacter.getContext('2d')
+        ctx.fillStyle = "blue";
+        ctx.fillRect(0, 0, 25, 25);
+    }
     
     handleMove(e) {
         e.preventDefault;
@@ -102,24 +112,40 @@ class GameView {
         this.removeClasses();
 
         let characterCoordinates = [this.board.character.positionX, this.board.character.positionY];
-        let charAtTag = document.getElementById(characterCoordinates);
-        charAtTag.classList.add('character');
-
         let shieldCoordinates = [this.board.shield.positionX, this.board.shield.positionY];
+        
+        let charAtTag = document.getElementById(characterCoordinates);
         let shieldAtTag = document.getElementById(shieldCoordinates);
-        shieldAtTag.classList.add('shield');
+        
+        if (JSON.stringify(characterCoordinates) === JSON.stringify(shieldCoordinates)) {
+            this.board.character.shielded = true;
+        }
 
-        charAtTag.firstElementChild.id = 'canvas-character'
-        this.createCanvasCharacter()
+        if (this.board.character.shielded === false) {
+            charAtTag.classList.add('character');
+            shieldAtTag.classList.add('shield');
+    
+            charAtTag.firstElementChild.id = 'canvas-character'
+            shieldAtTag.firstElementChild.id = 'canvas-shield'
+    
+            this.createCanvasCharacter()
+            this.createCanvasShield()
+        } else {
+            let shieldedCharacterCoordinates = [this.board.character.positionX, this.board.character.positionY];
+            let shieldedCharAtTag = document.getElementById(shieldedCharacterCoordinates);
 
-        shieldAtTag.firstElementChild.id = 'canvas-shield'
-        this.createCanvasShield()
+            shieldedCharAtTag.classList.add('shielded-character');
+            shieldedCharAtTag.firstElementChild.id = 'canvas-shielded-character'
+            
+            this.createCanvasShieldedCharacter()
+        }
     }
 
     removeClasses() {
         document.querySelectorAll('li').forEach(liEle => {
             liEle.classList.remove('character')
             liEle.classList.remove('shield')
+            liEle.classList.remove('shield-character')
         })
         document.querySelectorAll('canvas').forEach(caEle => {
             caEle.id = ""

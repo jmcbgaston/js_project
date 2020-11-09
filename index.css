@@ -20,8 +20,8 @@ li {
 canvas {
     position: absolute;
     /* background-color: lightsalmon; */
-    width: 30px;
-    height: 30px;
+    width: 43px;
+    height: 43px;
 }
 
 .left-bar {
@@ -79,6 +79,8 @@ canvas {
 }
 
 .main-screen ul li {
+    outline-style: none;
+    display: grid;
     background-color: lightskyblue;
     height: 37.5px;
     width: 37.5px;

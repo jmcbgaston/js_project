@@ -5,7 +5,6 @@ class Shield {
         this.isBroken = false
         this.positionX = 7
         this.positionY = 7
-        this.position = ""
     }
 }
 
