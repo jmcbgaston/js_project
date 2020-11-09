@@ -68,8 +68,8 @@ canvas {
 .shield-hero-game {
     background-color: yellow;
     /* display: flex; */
-    width: 624px;
-    height: 624px;
+    width: 600px;
+    height: 600px;
 }
 
 .main-screen ul {
@@ -80,8 +80,8 @@ canvas {
 
 .main-screen ul li {
     background-color: lightskyblue;
-    height: 39px;
-    width: 39px;
+    height: 37.5px;
+    width: 37.5px;
 }
 
 .right-bar {

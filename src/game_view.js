@@ -13,7 +13,7 @@ class GameView {
         window.shield = this.board.shield
         window.board = this.board
     }
-    
+
     setupGame() {
         let html = "";
         for (let i = 0; i < this.board.grid.length; i++) {
@@ -35,6 +35,7 @@ class GameView {
         }
         this.element.innerHTML = html;
         this.createCanvasCharacter();
+        this.createCanvasShield();
     }
 
     createCanvasCharacter() {
@@ -43,7 +44,17 @@ class GameView {
         canvasCharacter.height = 30;
 
         const ctx = canvasCharacter.getContext('2d')
-        ctx.fillStyle = "beige";
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, 25, 25);
+    }
+
+    createCanvasShield() {
+        const canvasShield = document.getElementById('canvas-shield')
+        canvasShield.width = 30;
+        canvasShield.height = 30;
+
+        const ctx = canvasShield.getContext('2d')
+        ctx.fillStyle = "black";
         ctx.fillRect(0, 0, 25, 25);
     }
     
@@ -89,12 +100,20 @@ class GameView {
 
     updateClasses() {
         this.removeClasses();
+
         let characterCoordinates = [this.board.character.positionX, this.board.character.positionY];
         let charAtTag = document.getElementById(characterCoordinates);
         charAtTag.classList.add('character');
 
+        let shieldCoordinates = [this.board.shield.positionX, this.board.shield.positionY];
+        let shieldAtTag = document.getElementById(shieldCoordinates);
+        shieldAtTag.classList.add('shield');
+
         charAtTag.firstElementChild.id = 'canvas-character'
         this.createCanvasCharacter()
+
+        shieldAtTag.firstElementChild.id = 'canvas-shield'
+        this.createCanvasShield()
     }
 
     removeClasses() {
