@@ -7,6 +7,12 @@ class GameView {
         this.board = new Board();
         this.handleMove = this.handleMove.bind(this);
         this.gameStarted = false
+        const processing = true
+        this.gameInProcess = processing
+        this.fireball1 = ""
+        this.fireball2 = ""
+        this.fireball3 = ""
+        this.fireball4 = ""
 
         this.setupGame();
         window.addEventListener('keydown', this.handleMove)
@@ -69,20 +75,6 @@ class GameView {
         ctx.fillStyle = "blue";
         ctx.fillRect(0, 0, 25, 25);
     }
-
-    createCanvasFireball(fireball) {
-        // const canvasFireball = document.getElementById('canvas-fireball')
-        fireball.width = 20;
-        fireball.height = 20;
-
-        const ctx = fireball.getContext('2d')
-
-        ctx.beginPath();
-        ctx.arc(0, 0, 20, 1, 1*Math.PI);
-        ctx.stroke();
-        ctx.fillStyle = "red";
-        ctx.fill();
-    }
     
     handleMove(e) {
         e.preventDefault;
@@ -124,39 +116,6 @@ class GameView {
         }
     }
 
-    generateFireballs() {
-        if (this.gameStarted) {
-            let randomPos1 = [0, Math.floor(Math.random() * Math.floor(15))];
-            let ele1 = document.getElementById(randomPos1)
-            let fireball1 = ele1.firstElementChild
-            fireball1.id = randomPos1
-            // debugger
-            this.createCanvasFireball(fireball1)
-            
-            let randomPos2 = [Math.floor(Math.random() * Math.floor(15)), 0];
-            let ele2 = document.getElementById(randomPos2)
-            let fireball2 = ele2.firstElementChild
-            fireball2.id = randomPos2
-            // debugger
-            this.createCanvasFireball(fireball2)
-            
-            let randomPos3 = [15, Math.floor(Math.random() * Math.floor(15))];
-            let ele3 = document.getElementById(randomPos3)
-            let fireball3 = ele3.firstElementChild
-            fireball3.id = randomPos3
-            // debugger
-            this.createCanvasFireball(fireball3)
-            
-            let randomPos4 = [Math.floor(Math.random() * Math.floor(15)), 15];
-            let ele4 = document.getElementById(randomPos4)
-            let fireball4 = ele4.firstElementChild
-            fireball4.id = randomPos4
-            // debugger
-            this.createCanvasFireball(fireball4)
-            this.gameStarted = false
-        }
-    }
-        
     updateClasses() {
         this.removeClasses();
         
@@ -188,16 +147,65 @@ class GameView {
             
             this.createCanvasShieldedCharacter()
             this.generateFireballs()
-            this.gameStarted = true
-
+            // this.gameStarted = true
             // not definite placement
             // this.play()
             // -------- //
         }
 
-        if (this.gameStarted) {
-            // this.animateFireballs()
+        // if (this.gameStarted) {
+        // }
+    }
+    
+    generateFireballs() {
+        if (!this.gameStarted) {
+            // debugger
+            let randomPos1 = [0, Math.floor(Math.random() * Math.floor(15))];
+            let ele1 = document.getElementById(randomPos1)
+            let fireball1 = ele1.firstElementChild
+            fireball1.id = randomPos1
+            this.fireball1 = fireball1
+            // debugger
+            this.createCanvasFireball(fireball1)
+            
+            let randomPos2 = [Math.floor(Math.random() * Math.floor(15)), 0];
+            let ele2 = document.getElementById(randomPos2)
+            let fireball2 = ele2.firstElementChild
+            fireball2.id = randomPos2
+            this.fireball2 = fireball2
+            // debugger
+            this.createCanvasFireball(fireball2)
+            
+            let randomPos3 = [15, Math.floor(Math.random() * Math.floor(15))];
+            let ele3 = document.getElementById(randomPos3)
+            let fireball3 = ele3.firstElementChild
+            fireball3.id = randomPos3
+            this.fireball3 = fireball3
+            // debugger
+            this.createCanvasFireball(fireball3)
+            
+            let randomPos4 = [Math.floor(Math.random() * Math.floor(15)), 15];
+            let ele4 = document.getElementById(randomPos4)
+            let fireball4 = ele4.firstElementChild
+            fireball4.id = randomPos4
+            this.fireball4 = fireball4
+            // debugger
+            this.createCanvasFireball(fireball4)
+            this.gameStarted = true
         }
+    }
+    
+    createCanvasFireball(fireball) {
+        fireball.width = 20;
+        fireball.height = 20;
+
+        const ctx = fireball.getContext('2d')
+
+        ctx.beginPath();
+        ctx.arc(0, 0, 20, 1, 1*Math.PI);
+        ctx.stroke();
+        ctx.fillStyle = "red";
+        ctx.fill();
     }
 
     play() {
@@ -207,14 +215,22 @@ class GameView {
 
     removeClasses() {
         document.querySelectorAll('li').forEach(liEle => {
-            liEle.classList.remove('character')
-            liEle.classList.remove('shield')
-            liEle.classList.remove('shield-character')
+            if (liEle.classList.contains('character') || liEle.classList.contains('shield') || liEle.classList.contains('shielded-character')) {
+                liEle.classList.remove('character')
+                liEle.classList.remove('shield')
+                liEle.classList.remove('shield-character')
+            }
         })
         document.querySelectorAll('canvas').forEach(caEle => {
-            caEle.id = ""
-            caEle.getContext('2d').clearRect(0, 0, 30, 30)
+            if (caEle.id !== this.fireball1.id && 
+                caEle.id !== this.fireball2.id &&
+                caEle.id !== this.fireball3.id &&
+                caEle.id !== this.fireball4.id) {
+                caEle.id = ""
+                caEle.getContext('2d').clearRect(0, 0, 30, 30)
+            }
         })
+        // debugger
     }
 
     createNewShield() {
