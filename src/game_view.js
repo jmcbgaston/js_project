@@ -1,5 +1,7 @@
 const Board = require('./board.js')
-const FireBall = require('./fireball')
+// const FireBall = require('./fireball')
+
+// For development, run webpack --watch
 
 class GameView {
     constructor(element) {
@@ -7,8 +9,8 @@ class GameView {
         this.board = new Board();
         this.handleMove = this.handleMove.bind(this);
         this.gameStarted = false
-        const processing = true
-        this.gameInProcess = processing
+        // const processing = true
+        // this.gameInProcess = processing
         this.fireball1 = ""
         this.fireball2 = ""
         this.fireball3 = ""
@@ -20,6 +22,7 @@ class GameView {
         window.character = this.board.character
         window.shield = this.board.shield
         window.board = this.board
+        window.st = this.gameStarted
     }
 
     setupGame() {
@@ -150,51 +153,240 @@ class GameView {
         }
     }
     
+    // create coordinates = [random x, random y]
+    // get li element at coordinates
+    // assign fireball(x) to canvas element of found li
+    // then call createCanvasFireball for drawing
+    // all fireballs from hereon after have a starting position
     generateFireballs() {
+        
         if (!this.gameStarted) {
-            let randomPos1 = [0, Math.floor(Math.random() * Math.floor(15))];
+            this.gameStarted = true
+
+            // top
+            let randomPos1 = [0, Math.floor(Math.random(0) * Math.floor(14))];
             let ele1 = document.getElementById(randomPos1)
             let fireball1 = ele1.firstElementChild
             fireball1.id = randomPos1
             this.fireball1 = fireball1
-            this.createCanvasFireball(fireball1)
-            
-            let randomPos2 = [Math.floor(Math.random() * Math.floor(15)), 0];
+            this.createCanvasFireball1(fireball1)
+
+            //left
+            let randomPos2 = [Math.floor(Math.random(0) * Math.floor(14)), 0];
             let ele2 = document.getElementById(randomPos2)
             let fireball2 = ele2.firstElementChild
             fireball2.id = randomPos2
             this.fireball2 = fireball2
-            this.createCanvasFireball(fireball2)
+            this.createCanvasFireball2(fireball2)
             
-            let randomPos3 = [15, Math.floor(Math.random() * Math.floor(15))];
+            // bottom
+            let randomPos3 = [15, Math.floor(Math.random(0) * Math.floor(14))];
             let ele3 = document.getElementById(randomPos3)
             let fireball3 = ele3.firstElementChild
             fireball3.id = randomPos3
             this.fireball3 = fireball3
-            this.createCanvasFireball(fireball3)
+            this.createCanvasFireball3(fireball3)
             
-            let randomPos4 = [Math.floor(Math.random() * Math.floor(15)), 15];
+            // right
+            let randomPos4 = [Math.floor(Math.random(0) * Math.floor(14)), 15];
             let ele4 = document.getElementById(randomPos4)
             let fireball4 = ele4.firstElementChild
             fireball4.id = randomPos4
             this.fireball4 = fireball4
-            this.createCanvasFireball(fireball4)
-            this.gameStarted = true
+            this.createCanvasFireball4(fireball4)
         }
     }
     
-    createCanvasFireball(fireball) {
-        fireball.width = 20;
-        fireball.height = 20;
+    // take canvas element at coordinates and draw fireball
+    // creates a single fireball
+    createCanvasFireball1(fireball) {
+
+        fireball.width = 50;
+        fireball.height = 50;
 
         const ctx = fireball.getContext('2d')
 
         ctx.beginPath();
-        ctx.arc(0, 0, 20, 1, 1*Math.PI);
+        ctx.arc(25, 25, 16, 0, Math.PI * 2);
         ctx.stroke();
-        ctx.fillStyle = "red";
+        ctx.fillStyle = "#E5610C";
         ctx.fill();
+            ctx.beginPath();
+            ctx.arc(25, 25, 13, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.fillStyle = "#E9A305";
+            ctx.fill();
+                ctx.beginPath();
+                ctx.arc(25, 25, 9, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.fillStyle = "#F3E201";
+                ctx.fill();
+
+        window.setInterval(() => {
+            this.animateFireball1(fireball)
+        }, 1000)
     }
+    createCanvasFireball2(fireball) {
+
+        fireball.width = 50;
+        fireball.height = 50;
+
+        const ctx = fireball.getContext('2d')
+
+        ctx.beginPath();
+        ctx.arc(25, 25, 16, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.fillStyle = "#E5610C";
+        ctx.fill();
+            ctx.beginPath();
+            ctx.arc(25, 25, 13, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.fillStyle = "#E9A305";
+            ctx.fill();
+                ctx.beginPath();
+                ctx.arc(25, 25, 9, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.fillStyle = "#F3E201";
+                ctx.fill();
+
+        window.setInterval(() => {
+            this.animateFireball2(fireball)
+        }, 1000)
+    }
+    createCanvasFireball3(fireball) {
+
+        fireball.width = 50;
+        fireball.height = 50;
+
+        const ctx = fireball.getContext('2d')
+
+        ctx.beginPath();
+        ctx.arc(25, 25, 16, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.fillStyle = "#E5610C";
+        ctx.fill();
+            ctx.beginPath();
+            ctx.arc(25, 25, 13, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.fillStyle = "#E9A305";
+            ctx.fill();
+                ctx.beginPath();
+                ctx.arc(25, 25, 9, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.fillStyle = "#F3E201";
+                ctx.fill();
+
+        window.setInterval(() => {
+            this.animateFireball3(fireball)
+        }, 1000)
+    }
+    createCanvasFireball4(fireball) {
+
+        fireball.width = 50;
+        fireball.height = 50;
+
+        const ctx = fireball.getContext('2d')
+
+        ctx.beginPath();
+        ctx.arc(25, 25, 16, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.fillStyle = "#E5610C";
+        ctx.fill();
+            ctx.beginPath();
+            ctx.arc(25, 25, 13, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.fillStyle = "#E9A305";
+            ctx.fill();
+                ctx.beginPath();
+                ctx.arc(25, 25, 9, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.fillStyle = "#F3E201";
+                ctx.fill();
+
+        window.setInterval(() => {
+            this.animateFireball4(fireball)
+        }, 1000)
+    }
+
+    animateFireball1(fireball) {
+
+
+        let nf1 = fireball.id.split(',')
+
+        console.log(nf1)
+
+        let nnf1 = [parseInt(nf1[0]) + 1, parseInt(nf1[1])]
+        let ele1 = document.getElementById(nnf1)
+        let fireball1 = ele1.firstElementChild
+        fireball1.id = nnf1
+        this.fireball1 = fireball1
+        this.createCanvasFireball1(fireball1)
+    }
+    animateFireball2(fireball) {
+        let nf2 = fireball.id.split(',')
+        let nnf2 = [parseInt(nf2[0]), parseInt(nf2[1]) + 1]
+        let ele2 = document.getElementById(nnf2)
+        let fireball2 = ele2.firstElementChild
+        fireball2.id = nnf2
+        this.fireball2 = fireball2
+        this.createCanvasFireball2(fireball2)
+    }
+    animateFireball3(fireball) {
+        let nf3 = fireball.id.split(',')
+        let nnf3 = [parseInt(nf3[0]) - 1, parseInt(nf3[1])]
+        let ele3 = document.getElementById(nnf3)
+        let fireball3 = ele3.firstElementChild
+        fireball3.id = nnf3
+        this.fireball3 = fireball3
+        this.createCanvasFireball3(fireball3)
+    }
+    animateFireball4(fireball) {
+        let nf4 = fireball.id.split(',')
+        let nnf4 = [parseInt(nf4[0]), parseInt(nf4[1]) - 1]
+        let ele4 = document.getElementById(nnf4)
+        let fireball4 = ele4.firstElementChild
+        fireball4.id = nnf4
+        this.fireball4 = fireball4
+        this.createCanvasFireball4(fireball4)
+    }
+
+    // animateFireball(fireball) {
+    //     // console.log(this.fireball1)
+    //     if (this.gameStarted) {
+            
+    //         // let nf1 = this.fireball1.id.split(',')
+    //         // let nnf1 = [parseInt(nf1[0]) + 1, parseInt(nf1[1])]
+    //         // let ele1 = document.getElementById(nnf1)
+    //         // let fireball1 = ele1.firstElementChild
+    //         // fireball1.id = nnf1
+    //         // this.fireball1 = fireball1
+    //         // this.createCanvasFireball(fireball1)
+
+    //         // let nf2 = this.fireball2.id.split(',')
+    //         // let nnf2 = [parseInt(nf2[0]), parseInt(nf2[1]) + 1]
+    //         // let ele2 = document.getElementById(nnf2)
+    //         // let fireball2 = ele2.firstElementChild
+    //         // fireball2.id = nnf2
+    //         // this.fireball2 = fireball2
+    //         // this.createCanvasFireball(fireball2)
+
+    //         // let nf3 = this.fireball3.id.split(',')
+    //         // let nnf3 = [parseInt(nf3[0]) - 1, parseInt(nf3[1])]
+    //         // let ele3 = document.getElementById(nnf3)
+    //         // let fireball3 = ele3.firstElementChild
+    //         // fireball3.id = nnf3
+    //         // this.fireball3 = fireball3
+    //         // this.createCanvasFireball(fireball3)
+
+    //         // let nf4 = this.fireball4.id.split(',')
+    //         // let nnf4 = [parseInt(nf4[0]), parseInt(nf4[1]) - 1]
+    //         // let ele4 = document.getElementById(nnf4)
+    //         // let fireball4 = ele4.firstElementChild
+    //         // fireball4.id = nnf4
+    //         // this.fireball4 = fireball4
+    //         // this.createCanvasFireball(fireball4)
+    //     }
+    // }
 
     play() {
         const audio = document.getElementById('audio')
