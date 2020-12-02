@@ -196,8 +196,31 @@ class GameView {
             this.createCanvasFireball(fireball4)
             
             window.setInterval(() => {
-                this.animateFireballs()
-            }, 1000)
+                if (this.fireball3.id[0] === "0") {
+
+                    console.log('c1')
+
+                    document.querySelectorAll('canvas').forEach(caEle => {
+                        if (caEle.id === this.fireball1.id || 
+                            caEle.id === this.fireball2.id ||
+                            caEle.id === this.fireball3.id ||
+                            caEle.id === this.fireball4.id) {
+                            caEle.id = ""
+                            caEle.getContext('2d').clearRect(0, 0, 50, 50)
+                        // } else {
+                        //     caEle.getContext('2d').clearRect(0, 0, 50, 50)
+                        }
+                    });
+
+                    this.gameStarted = false
+                    this.generateFireballs();
+                } else {
+
+                    console.log('c2')
+
+                    this.animateFireballs()
+                }
+            }, 200)
         }
 
     }
@@ -487,7 +510,7 @@ class GameView {
 
         let oldF4 = this.fireball4
         let splitPos4 = oldF4.id.split(',')
-        
+
         this.fireball4.id = ""
         this.fireball4.getContext('2d').clearRect(0, 0, 50, 50)
 
