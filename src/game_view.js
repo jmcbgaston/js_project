@@ -1,7 +1,5 @@
-const Board = require('./board.js')
-// const FireBall = require('./fireball')
-
 // For development, run webpack --watch
+const Board = require('./board.js')
 
 class GameView {
     constructor(element) {
@@ -9,8 +7,6 @@ class GameView {
         this.board = new Board();
         this.handleMove = this.handleMove.bind(this);
         this.gameStarted = false
-        // const processing = true
-        // this.gameInProcess = processing
         this.fireball1 = ""
         this.fireball2 = ""
         this.fireball3 = ""
@@ -153,52 +149,85 @@ class GameView {
         }
     }
     
-    // create coordinates = [random x, random y]
-    // get li element at coordinates
-    // assign fireball(x) to canvas element of found li
-    // then call createCanvasFireball for drawing
-    // all fireballs from hereon after have a starting position
+    reroll(n) {
+        let roll = Math.floor(Math.random(0) * 14) + 1;
+        return roll === n ? this.reroll(n) : roll
+    }
+
     generateFireballs() {
         
         if (!this.gameStarted) {
             this.gameStarted = true
 
+            let roll1 = Math.floor(Math.random() * 14) + 1;
+            let roll2 = Math.floor(Math.random() * 14) + 1;
+            let roll3 = Math.floor(Math.random() * 14) + 1;
+            let roll4 = Math.floor(Math.random() * 14) + 1;
+            
+            let rerollArr = [roll1, roll2, roll3, roll4]
+            // console.log(rerollArr)
+            
+            for (let i = 0; i < rerollArr.length; i++) {
+                for (let j = 0; j < rerollArr.length; j++) {
+                    if (i !== j && rerollArr[i] === rerollArr[j]) {
+                        rerollArr[i] = this.reroll(rerollArr[i])
+                    }
+                }
+                
+            }
+            // console.log(rerollArr)
+
+            roll1 = rerollArr[0]
+            roll2 = rerollArr[1]
+            roll3 = rerollArr[2]
+            roll4 = rerollArr[3]
+
             // top
-            let randomPos1 = [0, (Math.floor(Math.random(0) * 14) + 1)];
+            let randomPos1 = [0, (roll1)];
             let ele1 = document.getElementById(randomPos1)
             let fireball1 = ele1.firstElementChild
             fireball1.id = randomPos1
+
+            // console.log(fireball1.id)
             this.fireball1 = fireball1
             this.createCanvasFireball(fireball1)
-
+            
             //left
-            let randomPos2 = [(Math.floor(Math.random(0) * 14) + 1), 0];
+            let randomPos2 = [(roll2), 0];
             let ele2 = document.getElementById(randomPos2)
             let fireball2 = ele2.firstElementChild
             fireball2.id = randomPos2
+
+            // console.log(fireball2.id)
             this.fireball2 = fireball2
             this.createCanvasFireball(fireball2)
             
             // bottom
-            let randomPos3 = [15, (Math.floor(Math.random(0) * 14) + 1)];
+            let randomPos3 = [15, (roll3)];
             let ele3 = document.getElementById(randomPos3)
             let fireball3 = ele3.firstElementChild
             fireball3.id = randomPos3
+
+            // console.log(fireball3.id)
             this.fireball3 = fireball3
             this.createCanvasFireball(fireball3)
             
             // right
-            let randomPos4 = [(Math.floor(Math.random(0) * 14) + 1), 15];
+            let randomPos4 = [(roll4), 15];
             let ele4 = document.getElementById(randomPos4)
             let fireball4 = ele4.firstElementChild
             fireball4.id = randomPos4
+
+            // console.log(fireball4.id)
             this.fireball4 = fireball4
             this.createCanvasFireball(fireball4)
             
             window.setInterval(() => {
-                if (this.fireball3.id[0] === "0") {
 
-                    console.log('c1')
+                if (this.fireball1.id.split(',')[0] === "15" ||
+                    this.fireball2.id.split(',')[1] === "15" || 
+                    this.fireball3.id.split(',')[0] === "0" || 
+                    this.fireball4.id.split(',')[1] === "0") {
 
                     document.querySelectorAll('canvas').forEach(caEle => {
                         if (caEle.id === this.fireball1.id || 
@@ -207,33 +236,25 @@ class GameView {
                             caEle.id === this.fireball4.id) {
                             caEle.id = ""
                             caEle.getContext('2d').clearRect(0, 0, 50, 50)
-                        // } else {
-                        //     caEle.getContext('2d').clearRect(0, 0, 50, 50)
                         }
                     });
 
                     this.gameStarted = false
                     this.generateFireballs();
                 } else {
-
-                    console.log('c2')
-
-                    this.animateFireballs()
+                    this.animateFireball1()
+                    this.animateFireball2()
+                    this.animateFireball3()
+                    this.animateFireball4()
                 }
-            }, 200)
+            }, 500)
         }
 
     }
     
-    // take canvas element at coordinates and draw fireball
-    // creates a single fireball
     createCanvasFireball(fireball) {
-        
-        // if (fireball.id.split(',')[0] === "14") {
-        //     window.clearInterval()
-        //     this.gameStarted = false
-        //     this.generateFireballs()
-        // }
+
+        console.log(fireball)
 
         fireball.width = 50;
         fireball.height = 50;
@@ -255,221 +276,17 @@ class GameView {
                 ctx.stroke();
                 ctx.fillStyle = "#F3E201";
                 ctx.fill();
-
-        // window.setInterval(() => {
-        //     this.animateFireball1(fireball)
-        //     // document.querySelectorAll('canvas').forEach(caEle => {
-        //     //     if (caEle.id === this.fireball1.id) {
-        //     //         caEle.id = ""
-        //     //         caEle.getContext('2d').clearRect(0, 0, 50, 50)
-        //     //     }
-        //     // })
-        // }, 1000)
-        
-        // window.setInterval(() => {
-        // }, 1050)
     }
 
-    // animateFireballs(fireball) {
-        
-    //     let oldPos = fireball.id
-    //     let splitPos = oldPos.id.split(',')
-
-    //     // if (splitPos[0] === "14") {
-    //     //     return
-    //     // } else {
-    //         let formattedPos = [parseInt(splitPos[0]) + 1, parseInt(splitPos[1])]
-    //         let ele1 = document.getElementById(formattedPos)
-    //         let fireball1 = ele1.firstElementChild
-    //         fireball1.id = nnf1
-    //         this.fireball1 = fireball1
-    //         this.createCanvasFireball1(fireball1)
-    //     // }
-    // }
-
-    // createCanvasFireball2(fireball) {
-
-    //     if (fireball.id.split(',')[1] === "15") {
-    //         window.clearInterval()
-    //     }
-
-    //     fireball.width = 50;
-    //     fireball.height = 50;
-
-    //     const ctx = fireball.getContext('2d')
-
-    //     ctx.beginPath();
-    //     ctx.arc(25, 25, 16, 0, Math.PI * 2);
-    //     ctx.stroke();
-    //     ctx.fillStyle = "#E5610C";
-    //     ctx.fill();
-    //         ctx.beginPath();
-    //         ctx.arc(25, 25, 13, 0, Math.PI * 2);
-    //         ctx.stroke();
-    //         ctx.fillStyle = "#E9A305";
-    //         ctx.fill();
-    //             ctx.beginPath();
-    //             ctx.arc(25, 25, 9, 0, Math.PI * 2);
-    //             ctx.stroke();
-    //             ctx.fillStyle = "#F3E201";
-    //             ctx.fill();
-
-    //     window.setInterval(() => {
-    //         this.animateFireball2(fireball)
-    //         document.querySelectorAll('canvas').forEach(caEle => {
-    //             if (caEle.id === this.fireball2.id) {
-    //                 caEle.id = ""
-    //                 caEle.getContext('2d').clearRect(0, 0, 50, 50)
-    //             }
-    //         })
-    //     }, 1000)
-
-    //     // window.setInterval(() => {
-    //     // }, 1050)
-    // }
-
-    // animateFireball2(fireball) {
-        
-    //     let nf2 = fireball.id.split(',')
-        
-    //     if (nf2[1] === "14") {
-    //         return
-    //     } else {
-    //         let nnf2 = [parseInt(nf2[0]), parseInt(nf2[1]) + 1]
-    //         let ele2 = document.getElementById(nnf2)
-    //         let fireball2 = ele2.firstElementChild
-    //         fireball2.id = nnf2
-    //         this.fireball2 = fireball2
-    //         this.createCanvasFireball2(fireball2)
-    //     }
-    // }
-
-    // createCanvasFireball3(fireball) {
-
-    //     // if (fireball.id.split(',')[0] === "0") {
-    //     //     window.clearInterval()
-    //     // }
-
-    //     fireball.width = 50;
-    //     fireball.height = 50;
-
-    //     const ctx = fireball.getContext('2d')
-
-    //     ctx.beginPath();
-    //     ctx.arc(25, 25, 16, 0, Math.PI * 2);
-    //     ctx.stroke();
-    //     ctx.fillStyle = "#E5610C";
-    //     ctx.fill();
-    //         ctx.beginPath();
-    //         ctx.arc(25, 25, 13, 0, Math.PI * 2);
-    //         ctx.stroke();
-    //         ctx.fillStyle = "#E9A305";
-    //         ctx.fill();
-    //             ctx.beginPath();
-    //             ctx.arc(25, 25, 9, 0, Math.PI * 2);
-    //             ctx.stroke();
-    //             ctx.fillStyle = "#F3E201";
-    //             ctx.fill();
-        
-    //     // window.setInterval(() => {
-    //     //     this.animateFireball3(fireball)
-    //     //     document.querySelectorAll('canvas').forEach(caEle => {
-    //     //         if (caEle.id === this.fireball3.id) {
-    //     //             caEle.id = ""
-    //     //             caEle.getContext('2d').clearRect(0, 0, 50, 50)
-    //     //         }
-    //     //     })
-    //     // }, 1050)
-
-    //     // window.setInterval(() => {
-    //     // }, 1050)
-    // }
-    
-    // animateFireball3(fireball) {
-        
-    //     let nf3 = fireball.id.split(',')
-        
-    //     if (nf3[0] === "0") {
-    //         return
-    //     } else {
-    //         let nnf3 = [parseInt(nf3[0]) - 1, parseInt(nf3[1])]
-    //         let ele3 = document.getElementById(nnf3)
-    //         let fireball3 = ele3.firstElementChild
-    //         fireball3.id = nnf3
-    //         this.fireball3 = fireball3
-    //         this.createCanvasFireball3(fireball3)
-    //     }
-    // }
-
-    // createCanvasFireball4(fireball) {
-        
-    //     if (fireball.id.split(',')[1] === "0") {
-    //         window.clearInterval()
-    //     }
-
-    //     fireball.width = 50;
-    //     fireball.height = 50;
-
-    //     const ctx = fireball.getContext('2d')
-
-    //     ctx.beginPath();
-    //     ctx.arc(25, 25, 16, 0, Math.PI * 2);
-    //     ctx.stroke();
-    //     ctx.fillStyle = "#E5610C";
-    //     ctx.fill();
-    //         ctx.beginPath();
-    //         ctx.arc(25, 25, 13, 0, Math.PI * 2);
-    //         ctx.stroke();
-    //         ctx.fillStyle = "#E9A305";
-    //         ctx.fill();
-    //             ctx.beginPath();
-    //             ctx.arc(25, 25, 9, 0, Math.PI * 2);
-    //             ctx.stroke();
-    //             ctx.fillStyle = "#F3E201";
-    //             ctx.fill();
-        
-    //     window.setInterval(() => {
-    //         this.animateFireball4(fireball)
-    //         document.querySelectorAll('canvas').forEach(caEle => {
-    //             if (caEle.id === this.fireball4.id) {
-    //                 caEle.id = ""
-    //                 caEle.getContext('2d').clearRect(0, 0, 50, 50)
-    //             }
-    //         })
-    //     }, 1000)
-
-    //     // window.setInterval(() => {
-    //     // }, 1050)
-
-    // }
-    
-    // animateFireball4(fireball) {
-        
-    //     let nf4 = fireball.id.split(',')
-        
-    //     if (nf4[1] === "0") {
-    //         return
-    //     } else {
-    //         let nnf4 = [parseInt(nf4[0]), parseInt(nf4[1]) - 1]
-    //         let ele4 = document.getElementById(nnf4)
-    //         let fireball4 = ele4.firstElementChild
-    //         fireball4.id = nnf4
-    //         this.fireball4 = fireball4
-    //         this.createCanvasFireball4(fireball4)
-    //     }
-    // }
-
-    animateFireballs() {
+    animateFireball1() {
 
         let oldF1 = this.fireball1
         let splitPos1 = oldF1.id.split(',')
         
-        this.fireball1.id = ""
+        // this.fireball1.id = ""
         this.fireball1.getContext('2d').clearRect(0, 0, 50, 50)
         
         let formattedPos1 = [parseInt(splitPos1[0]) + 1, parseInt(splitPos1[1])]
-
-        // console.log(formattedPos1)
 
             let ele1 = document.getElementById(formattedPos1)
             let child1 = ele1.firstElementChild
@@ -477,11 +294,14 @@ class GameView {
             
             this.fireball1 = child1
             this.createCanvasFireball(child1)
+    }
+
+    animateFireball2() {
 
         let oldF2 = this.fireball2
         let splitPos2 = oldF2.id.split(',')
 
-        this.fireball2.id = ""
+        // this.fireball2.id = ""
         this.fireball2.getContext('2d').clearRect(0, 0, 50, 50)
 
         let formattedPos2 = [parseInt(splitPos2[0]), parseInt(splitPos2[1]) + 1]
@@ -492,11 +312,14 @@ class GameView {
             
             this.fireball2 = child2
             this.createCanvasFireball(child2)
+    }
+
+    animateFireball3() {
 
         let oldF3 = this.fireball3
         let splitPos3 = oldF3.id.split(',')
 
-        this.fireball3.id = ""
+        // this.fireball3.id = ""
         this.fireball3.getContext('2d').clearRect(0, 0, 50, 50)
 
         let formattedPos3 = [parseInt(splitPos3[0]) - 1, parseInt(splitPos3[1])]
@@ -507,11 +330,14 @@ class GameView {
             
             this.fireball3 = child3
             this.createCanvasFireball(child3)
+    }
+
+    animateFireball4() {
 
         let oldF4 = this.fireball4
         let splitPos4 = oldF4.id.split(',')
 
-        this.fireball4.id = ""
+        // this.fireball4.id = ""
         this.fireball4.getContext('2d').clearRect(0, 0, 50, 50)
 
         let formattedPos4 = [parseInt(splitPos4[0]), parseInt(splitPos4[1]) - 1]
@@ -544,8 +370,6 @@ class GameView {
                 caEle.id !== this.fireball4.id) {
                 caEle.id = ""
                 caEle.getContext('2d').clearRect(0, 0, 30, 30)
-            // } else {
-            //     caEle.getContext('2d').clearRect(0, 0, 50, 50)
             }
         })
     }
