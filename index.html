@@ -2,39 +2,47 @@
 <html lang="en">
     <head>
         <title>Shield Hero</title>
+
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
         <link href="./reset.css" rel="stylesheet">
         <link href="./index.css" rel="stylesheet">
+        
+        <link rel="icon" type="image/png" href="./images/favicon.png">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
         <script src="./dist/main.js"></script>
     </head>        
     <body>
 
         <ul class="left-bar">
-            <li>SHIELD HERO</li>
-            <li>TBD</li>
-            <li>use Arrow Keys to move around grid</li>
+            <li class="title">SHIELD HERO</li>
+            <li></li>
+            <li>Use the arrow keys to move.</li>
         </ul>
         
         <ul class="center-bar">
             <ul class="main-bar">
-                <li>Game details</li>
+                <li id="game-detail-score">Waves Survived: 0</li>
                 
                 <li>
-                    <button id="play-button">play</button>
-                    <button id="pause-button">mute</button>
+                    <button id="sound-button" value="playing">mute</button>
                     <audio id="audio" src="./retro.mp3"></audio>
                 </li>
             </ul>
             <ul class="main-screen">
                 <figure class="shield-hero-game">
-                    <button id="start-button">Start</button>
+                    <button id="start-button">-- Start --</button>
                 </figure>
             </ul>
         </ul>
 
         <ul class="right-bar">
-            <li>You, the player (white), must pick up the shield (black), and dodge as well as block incoming fireballs. The longer you survive, the better your score.</li>
+            <li>Pick up the shield.</li>
+            <li>Dodge incoming fireballs.</li>
+            <li>The longer you survive, the better your score.</li>
         </ul>
 
     </body>

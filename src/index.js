@@ -3,10 +3,19 @@ const GameView = require('./game_view')
 document.addEventListener('DOMContentLoaded', () => {
     const startButton = document.getElementById('start-button');
     startButton.addEventListener('click', startGame);
-    const playButton = document.getElementById('play-button');
-    playButton.addEventListener('click', play);
-    const pauseButton = document.getElementById('pause-button');
-    pauseButton.addEventListener('click', pause);
+
+    const soundButton = document.getElementById('sound-button');
+    soundButton.addEventListener('click', toggleSound);
+
+    const start = document.getElementById('start-button')
+    if (start) {
+        window.setInterval(() => {
+            start.innerHTML = ""
+        }, 500)
+        window.setInterval(() => {
+            start.innerHTML = "-- Start --"
+        }, 1000)
+    }
 })
 
 function startGame() {
@@ -14,14 +23,33 @@ function startGame() {
     new GameView(rootElement)
 }
 
-function play() {
+function toggleSound() {
+    const soundButton = document.getElementById('sound-button');
     const audio = document.getElementById('audio')
-    audio.play();
+
+    if (soundButton.value === "playing") {
+        soundButton.value = "muted"
+        audio.pause()
+        console.log('pause')
+
+    } else if (soundButton.value === "muted") {
+        soundButton.value = "playing"
+        audio.play();
+        console.log('playing')
+        
+    } else {
+
+    }
 }
 
-function pause() {
-    const audio = document.getElementById('audio')
-    audio.pause();
-}
+// function play() {
+//     const audio = document.getElementById('audio')
+//     audio.play();
+// }
+
+// function pause() {
+//     const audio = document.getElementById('audio')
+//     audio.pause();
+// }
 
 
