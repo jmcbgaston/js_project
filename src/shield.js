@@ -9,13 +9,13 @@ class Shield {
         this.positionY = 3
     }
 
-    damage() {
-        this.health - 1
+    // damage() {
+    //     this.health - 1
 
-        if (this.health === 0) {
-            this.isBroken = true
-        }
-    }
+    //     if (this.health === 0) {
+    //         this.isBroken = true
+    //     }
+    // }
 }
 
 module.exports = Shield
