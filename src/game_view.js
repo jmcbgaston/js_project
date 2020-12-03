@@ -12,7 +12,12 @@ class GameView {
         this.fireball3 = ""
         this.fireball4 = ""
 
-        this.fireballCoordinates = [this.fireball1.id, this.fireball2.id, this.fireball3.id, this.fireball4.id]
+        this.fireballCoordinates = [
+            this.fireball1.id, 
+            this.fireball2.id, 
+            this.fireball3.id, 
+            this.fireball4.id
+        ]
 
         this.intervals = ""
         this.clear = ""
@@ -62,9 +67,11 @@ class GameView {
                 let idX = i
                 let idY = j
 
-                if (idX === 7 && idY === 8) {
+                // if (idX === 7 && idY === 8) {
+                if (idX === 3 && idY === 4) {
                     html += `<li id=${id} class="character"><canvas id='canvas-character'></canvas></li>`
-                } else if (idX === 7 && idY === 7) {
+                // } else if (idX === 7 && idY === 7) {
+                } else if (idX === 3 && idY === 3) {
                     html += `<li id=${id} class="shield"><canvas id='canvas-shield'></canvas></li>`
                 } else {
                     html += `<li id=${id}><canvas></canvas></li>`
@@ -86,23 +93,29 @@ class GameView {
     
     createCanvasCharacter() {
         const canvasCharacter = document.getElementById('canvas-character')
-        canvasCharacter.width = 50;
-        canvasCharacter.height = 50;
+        // canvasCharacter.width = 50;
+        // canvasCharacter.height = 50;
+        canvasCharacter.width = 100;
+        canvasCharacter.height = 100;
         
         const ctx = canvasCharacter.getContext('2d')
         ctx.fillStyle = "white";
-        ctx.fillRect(4, 4, 40, 40);
+        // ctx.fillRect(4, 4, 40, 40);
+        ctx.fillRect(8, 8, 80, 80);
     }
 
     createCanvasShield() {
         const canvasShield = document.getElementById('canvas-shield')
-        canvasShield.width = 50;
-        canvasShield.height = 50;
+        // canvasShield.width = 50;
+        // canvasShield.height = 50;
+        canvasShield.width = 100;
+        canvasShield.height = 100;
         
         const ctx = canvasShield.getContext('2d')
         const shieldSprite = new Image()
         shieldSprite.onload = (() => {
-            ctx.drawImage(shieldSprite, 4, 4, 40, 40)
+            // ctx.drawImage(shieldSprite, 4, 4, 40, 40)
+            ctx.drawImage(shieldSprite, 8, 8, 80, 80)
         })
         shieldSprite.src = "./images/shield.png"
     }
@@ -121,23 +134,27 @@ class GameView {
     
     createCanvasShieldedCharacter() {
         const canvasShieldedCharacter = document.getElementById('canvas-shielded-character')
-        canvasShieldedCharacter.width = 50;
-        canvasShieldedCharacter.height = 50;
+        // canvasShieldedCharacter.width = 50;
+        // canvasShieldedCharacter.height = 50;
+        canvasShieldedCharacter.width = 100;
+        canvasShieldedCharacter.height = 100;
 
         const ctx = canvasShieldedCharacter.getContext('2d')
         ctx.fillStyle = "blue";
-        ctx.fillRect(4, 4, 40, 40);
+        // ctx.fillRect(4, 4, 40, 40);
+        ctx.fillRect(8, 8, 80, 80);
     }
 
     handleMove(e) {
         e.preventDefault;
 
-        if (GameView.KEYS[e.keyCode] === this.board.character.directionFaced) {
+        // if (GameView.KEYS[e.keyCode] === this.board.character.directionFaced) {
             let newPos
 
             if (GameView.KEYS[e.keyCode] === "N") {
                 newPos = this.board.character.positionX - 1
-                if (newPos > 0 && newPos < 15) {
+                // if (newPos > 0 && newPos < 15) {
+                if (newPos > 0 && newPos < 7) {
                     this.board.character.positionX = newPos
                     
                     if (!this.isGameOver()) {
@@ -148,7 +165,8 @@ class GameView {
             
             if (GameView.KEYS[e.keyCode] === "S") {
                 newPos = this.board.character.positionX + 1
-                if (newPos > 0 && newPos < 15) {
+                // if (newPos > 0 && newPos < 15) {
+                if (newPos > 0 && newPos < 7) {
                     this.board.character.positionX = newPos
                     
                     if (!this.isGameOver()) {
@@ -159,7 +177,8 @@ class GameView {
             
             if (GameView.KEYS[e.keyCode] === "E") {
                 newPos = this.board.character.positionY + 1
-                if (newPos > 0 && newPos < 15) {
+                // if (newPos > 0 && newPos < 15) {
+                if (newPos > 0 && newPos < 7) {
                     this.board.character.positionY = newPos
 
                     if (!this.isGameOver()) {
@@ -170,7 +189,8 @@ class GameView {
             
             if (GameView.KEYS[e.keyCode] === "W") {
                 newPos = this.board.character.positionY - 1
-                if (newPos > 0 && newPos < 15) {
+                // if (newPos > 0 && newPos < 15) {
+                if (newPos > 0 && newPos < 7) {
                     this.board.character.positionY = newPos
 
                     if (!this.isGameOver()) {
@@ -179,10 +199,10 @@ class GameView {
                 }
             }
             
-        } else {
-            let newDirFaced = GameView.KEYS[e.keyCode]
-            this.board.character.directionFaced = newDirFaced
-        }
+        // } else {
+        //     let newDirFaced = GameView.KEYS[e.keyCode]
+        //     this.board.character.directionFaced = newDirFaced
+        // }
     }
 
     updateClasses() {
@@ -217,7 +237,8 @@ class GameView {
     }
     
     reroll(n) {
-        let roll = Math.floor(Math.random(0) * 14) + 1;
+        // let roll = Math.floor(Math.random(0) * 14) + 1;
+        let roll = Math.floor(Math.random(0) * 7) + 1;
         return roll === n ? this.reroll(n) : roll
     }
 
@@ -233,10 +254,14 @@ class GameView {
         if (!this.gameStarted) {
             this.gameStarted = true
 
-            let roll1 = Math.floor(Math.random() * 14) + 1;
-            let roll2 = Math.floor(Math.random() * 14) + 1;
-            let roll3 = Math.floor(Math.random() * 14) + 1;
-            let roll4 = Math.floor(Math.random() * 14) + 1;
+            // let roll1 = Math.floor(Math.random() * 14) + 1;
+            // let roll2 = Math.floor(Math.random() * 14) + 1;
+            // let roll3 = Math.floor(Math.random() * 14) + 1;
+            // let roll4 = Math.floor(Math.random() * 14) + 1;
+            let roll1 = Math.floor(Math.random() * 7) + 1;
+            let roll2 = Math.floor(Math.random() * 7) + 1;
+            let roll3 = Math.floor(Math.random() * 7) + 1;
+            let roll4 = Math.floor(Math.random() * 7) + 1;
             let rerollArr = [roll1, roll2, roll3, roll4]
             
             for (let i = 0; i < rerollArr.length; i++) {
@@ -271,7 +296,8 @@ class GameView {
             this.createCanvasFireball(fireball2)
             
             // bottom
-            let randomPos3 = [15, (roll3)];
+            // let randomPos3 = [15, (roll3)];
+            let randomPos3 = [7, (roll3)];
             let ele3 = document.getElementById(randomPos3)
             let fireball3 = ele3.firstElementChild
             fireball3.id = randomPos3
@@ -280,7 +306,8 @@ class GameView {
             this.createCanvasFireball(fireball3)
             
             // right
-            let randomPos4 = [(roll4), 15];
+            // let randomPos4 = [(roll4), 15];
+            let randomPos4 = [(roll4), 7];
             let ele4 = document.getElementById(randomPos4)
             let fireball4 = ele4.firstElementChild
             fireball4.id = randomPos4
@@ -292,8 +319,12 @@ class GameView {
 
                 console.log("intervals")
 
-                if (this.fireball1.id.split(',')[0] === "15" ||
-                    this.fireball2.id.split(',')[1] === "15" || 
+                // if (this.fireball1.id.split(',')[0] === "15" ||
+                //     this.fireball2.id.split(',')[1] === "15" || 
+                //     this.fireball3.id.split(',')[0] === "0" || 
+                //     this.fireball4.id.split(',')[1] === "0") {
+                if (this.fireball1.id.split(',')[0] === "7" ||
+                    this.fireball2.id.split(',')[1] === "7" || 
                     this.fireball3.id.split(',')[0] === "0" || 
                     this.fireball4.id.split(',')[1] === "0") {
 
@@ -304,7 +335,8 @@ class GameView {
                             caEle.id === this.fireball4.id) {
 
                             caEle.id = ""
-                            caEle.getContext('2d').clearRect(0, 0, 50, 50)
+                            // caEle.getContext('2d').clearRect(0, 0, 50, 50)
+                            caEle.getContext('2d').clearRect(0, 0, 100, 100)
                         }
                     });
 
@@ -328,7 +360,8 @@ class GameView {
                 console.log("clear")
 
                 window.clearInterval(this.intervals)
-            }, 6400);
+            // }, 6400);
+            }, 3200);
         }
 
     }
@@ -336,13 +369,16 @@ class GameView {
     createCanvasFireball(fireball) {
 
         // const canvasShield = document.getElementById('canvas-shield')
-        fireball.width = 50;
-        fireball.height = 50;
+        // fireball.width = 50;
+        // fireball.height = 50;
+        fireball.width = 100;
+        fireball.height = 100;
 
         const ctx = fireball.getContext('2d')
         const fireballSprite = new Image()
         fireballSprite.onload = (() => {
-            ctx.drawImage(fireballSprite, 4, 4, 40, 40)
+            // ctx.drawImage(fireballSprite, 4, 4, 40, 40)
+            ctx.drawImage(fireballSprite, 8, 8, 80, 80)
         })
 
         if (this.fireball1 === fireball) {
@@ -366,7 +402,8 @@ class GameView {
         let child1 = ele1.firstElementChild
         child1.id = formattedPos1
 
-        this.fireball1.getContext('2d').clearRect(0, 0, 50, 50)
+        // this.fireball1.getContext('2d').clearRect(0, 0, 50, 50)
+        this.fireball1.getContext('2d').clearRect(0, 0, 100, 100)
         this.fireball1 = child1
         
         if (!this.isGameOver()) {
@@ -382,7 +419,8 @@ class GameView {
         let child2 = ele2.firstElementChild
         child2.id = formattedPos2
 
-        this.fireball2.getContext('2d').clearRect(0, 0, 50, 50)
+        // this.fireball2.getContext('2d').clearRect(0, 0, 50, 50)
+        this.fireball2.getContext('2d').clearRect(0, 0, 100, 100)
         this.fireball2 = child2
 
         if (!this.isGameOver()) {
@@ -398,7 +436,8 @@ class GameView {
         let child3 = ele3.firstElementChild
         child3.id = formattedPos3        
 
-        this.fireball3.getContext('2d').clearRect(0, 0, 50, 50)
+        // this.fireball3.getContext('2d').clearRect(0, 0, 50, 50)
+        this.fireball3.getContext('2d').clearRect(0, 0, 100, 100)
         this.fireball3 = child3
 
         if (!this.isGameOver()) {
@@ -414,7 +453,8 @@ class GameView {
         let child4 = ele4.firstElementChild
         child4.id = formattedPos4         
 
-        this.fireball4.getContext('2d').clearRect(0, 0, 50, 50)
+        // this.fireball4.getContext('2d').clearRect(0, 0, 50, 50)
+        this.fireball4.getContext('2d').clearRect(0, 0, 100, 100)
         this.fireball4 = child4
 
         if (!this.isGameOver()) {
@@ -473,7 +513,8 @@ class GameView {
                 caEle.id !== this.fireball4.id) {
 
                 caEle.id = ""
-                caEle.getContext('2d').clearRect(0, 0, 50, 50)
+                // caEle.getContext('2d').clearRect(0, 0, 50, 50)
+                caEle.getContext('2d').clearRect(0, 0, 100, 100)
             }
         })
 
@@ -488,7 +529,8 @@ class GameView {
                 caEle.id === this.fireball4.id) {
 
                 caEle.id = ""
-                caEle.getContext('2d').clearRect(0, 0, 50, 50)
+                // caEle.getContext('2d').clearRect(0, 0, 50, 50)
+                caEle.getContext('2d').clearRect(0, 0, 100, 100)
             }
         })
 

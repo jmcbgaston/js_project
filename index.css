@@ -24,8 +24,10 @@ li {
 
 canvas {
     position: absolute;
-    width: 37.5px;
-    height: 37.5px;
+    /* width: 37.5px;
+    height: 37.5px; */
+    width: 75px;
+    height: 75px;
 }
 
 .left-bar {
@@ -88,7 +90,7 @@ canvas {
 .shield-hero-game {
     width: 600px;
     height: 600px;
-    background: url('./images/floor.png');
+    background: url('./images/floor8x8.jpg');
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -107,8 +109,10 @@ canvas {
 
 .main-screen ul li {
     /* display: grid; */
-    height: 37.5px;
-    width: 37.5px;
+    /* height: 37.5px;
+    width: 37.5px; */
+    height: 75px;
+    width: 75px;
 }
 
 .right-bar {
