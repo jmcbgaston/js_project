@@ -19,14 +19,26 @@ class GameView {
 
         this.setupGame = this.setupGame.bind(this);
         this.handleMove = this.handleMove.bind(this);
+        this.isGameOver = this.isGameOver.bind(this);
         this.updateClasses = this.updateClasses.bind(this);
         this.createShieldedCharacter = this.createShieldedCharacter.bind(this);
+
+        this.generateFireballs = this.generateFireballs.bind(this);
         this.animateFireball1 = this.animateFireball1.bind(this);
         this.animateFireball2 = this.animateFireball2.bind(this);
         this.animateFireball3 = this.animateFireball3.bind(this);
         this.animateFireball4 = this.animateFireball4.bind(this);
 
+        this.resetGame = this.resetGame.bind(this);
+        this.removeClasses = this.removeClasses.bind(this);
+        this.removeFireballs = this.removeFireballs.bind(this);
+
         this.setupGame();
+
+        this.play = this.play.bind(this)
+        this.stop = this.stop.bind(this)
+        this.pause = this.pause.bind(this)
+        this.audio = document.getElementById('audio')
 
         window.addEventListener('keydown', this.handleMove)   
     }
@@ -56,28 +68,41 @@ class GameView {
             html += "</ul>";
         }
         this.element.innerHTML = html;
-        this.createCanvasCharacter();
         this.createCanvasShield();
+        this.createCanvasCharacter();
+    }
+    
+    createCanvasShieldedCharacter() {
+        const canvasShieldedCharacter = document.getElementById('canvas-shielded-character')
+        canvasShieldedCharacter.width = 50;
+        canvasShieldedCharacter.height = 50;
+
+        const ctx = canvasShieldedCharacter.getContext('2d')
+        ctx.fillStyle = "blue";
+        ctx.fillRect(4, 4, 40, 40);
     }
 
     createCanvasCharacter() {
         const canvasCharacter = document.getElementById('canvas-character')
-        canvasCharacter.width = 30;
-        canvasCharacter.height = 30;
+        canvasCharacter.width = 50;
+        canvasCharacter.height = 50;
 
         const ctx = canvasCharacter.getContext('2d')
         ctx.fillStyle = "white";
-        ctx.fillRect(0, 0, 25, 25);
+        ctx.fillRect(4, 4, 40, 40);
     }
 
     createCanvasShield() {
         const canvasShield = document.getElementById('canvas-shield')
-        canvasShield.width = 30;
-        canvasShield.height = 30;
+        canvasShield.width = 50;
+        canvasShield.height = 50;
 
         const ctx = canvasShield.getContext('2d')
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, 25, 25);
+        const shieldSprite = new Image()
+        shieldSprite.onload = (() => {
+            ctx.drawImage(shieldSprite, 4, 4, 40, 40)
+        })
+        shieldSprite.src = "../images/shield.png"
     }
     
     handleMove(e) {
@@ -136,21 +161,6 @@ class GameView {
         }
     }
 
-    isGameOver() {
-        let cX = this.board.character.positionX
-        let cY = this.board.character.positionY
-
-        if (this.fireball1.id === `${cX},${cY}` ||
-            this.fireball2.id === `${cX},${cY}` ||
-            this.fireball3.id === `${cX},${cY}` ||
-            this.fireball4.id === `${cX},${cY}`) {
-            alert('Game Over!!')
-            this.resetGame()
-        } else {
-            return false
-        }
-    }
-
     updateClasses() {
         this.removeClasses();
         
@@ -171,16 +181,6 @@ class GameView {
         }
     }
 
-    createCanvasShieldedCharacter() {
-        const canvasShieldedCharacter = document.getElementById('canvas-shielded-character')
-        canvasShieldedCharacter.width = 30;
-        canvasShieldedCharacter.height = 30;
-
-        const ctx = canvasShieldedCharacter.getContext('2d')
-        ctx.fillStyle = "blue";
-        ctx.fillRect(0, 0, 25, 25);
-    }
-
     startingPositions(charAtTag, shieldAtTag) {
         charAtTag.classList.add('character');
         shieldAtTag.classList.add('shield');
@@ -199,6 +199,7 @@ class GameView {
         shieldedCharAtTag.classList.add('shielded-character');
         shieldedCharAtTag.firstElementChild.id = 'canvas-shielded-character'
         
+        this.board.character.shield = this.board.shield
         this.createCanvasShieldedCharacter()
         this.generateFireballs()
     }
@@ -209,6 +210,8 @@ class GameView {
     }
 
     generateFireballs() {
+
+        this.play()
         
         if (!this.gameStarted) {
             this.gameStarted = true
@@ -280,6 +283,7 @@ class GameView {
                             caEle.id === this.fireball2.id ||
                             caEle.id === this.fireball3.id ||
                             caEle.id === this.fireball4.id) {
+
                             caEle.id = ""
                             caEle.getContext('2d').clearRect(0, 0, 50, 50)
                         }
@@ -293,47 +297,68 @@ class GameView {
                     this.animateFireball2()
                     this.animateFireball3()
                     this.animateFireball4()
-
                 }
-            }, 400)
+            }, 200)
 
             this.clear = window.setInterval(() => {
                 window.clearInterval(this.intervals)
                 // console.log("clear")
-            }, 6400);
+            }, 3200);
         }
 
     }
 
     createCanvasFireball(fireball) {
 
+        // const canvasShield = document.getElementById('canvas-shield')
         fireball.width = 50;
         fireball.height = 50;
 
         const ctx = fireball.getContext('2d')
+        const fireballSprite = new Image()
+        fireballSprite.onload = (() => {
+            ctx.drawImage(fireballSprite, 4, 4, 40, 40)
+        })
 
-        ctx.beginPath();
-        ctx.arc(25, 25, 16, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.fillStyle = "#E5610C";
-        ctx.fill();
-            ctx.beginPath();
-            ctx.arc(25, 25, 13, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.fillStyle = "#E9A305";
-            ctx.fill();
-                ctx.beginPath();
-                ctx.arc(25, 25, 9, 0, Math.PI * 2);
-                ctx.stroke();
-                ctx.fillStyle = "#F3E201";
-                ctx.fill();
+        if (this.fireball1 === fireball) {
+            fireballSprite.src = "../images/top.png"
+        } else if (this.fireball2 === fireball) {
+            fireballSprite.src = "../images/left.png"
+        } else if (this.fireball3 === fireball) {
+            fireballSprite.src = "../images/bottom.png"
+        } else if (this.fireball4 === fireball) {
+            fireballSprite.src = "../images/right.png"
+        } else {
+
+        }
+
+
+
+        // fireball.width = 30;
+        // fireball.height = 30;
+
+        // const ctx = fireball.getContext('2d')
+
+        // ctx.beginPath();
+        // ctx.arc(15, 15, 12, 0, Math.PI * 2);
+        // ctx.stroke();
+        // ctx.fillStyle = "#E5610C";
+        // ctx.fill();
+        //     ctx.beginPath();
+        //     ctx.arc(15, 15, 10, 0, Math.PI * 2);
+        //     ctx.stroke();
+        //     ctx.fillStyle = "#E9A305";
+        //     ctx.fill();
+        //         ctx.beginPath();
+        //         ctx.arc(15, 15, 7, 0, Math.PI * 2);
+        //         ctx.stroke();
+        //         ctx.fillStyle = "#F3E201";
+        //         ctx.fill();
     }
 
     animateFireball1() {
 
         let oldF1 = this.fireball1
-        // console.log(oldF1.id.split(','))
-
         let splitPos1 = oldF1.id.split(',')
         this.fireball1.getContext('2d').clearRect(0, 0, 50, 50)
         let formattedPos1 = [parseInt(splitPos1[0]) + 1, parseInt(splitPos1[1])]
@@ -351,8 +376,6 @@ class GameView {
     animateFireball2() {
 
         let oldF2 = this.fireball2
-        // console.log(oldF2.id.split(','))
-
         let splitPos2 = oldF2.id.split(',')
         this.fireball2.getContext('2d').clearRect(0, 0, 50, 50)
         let formattedPos2 = [parseInt(splitPos2[0]), parseInt(splitPos2[1]) + 1]
@@ -371,8 +394,6 @@ class GameView {
     animateFireball3() {
 
         let oldF3 = this.fireball3
-        // console.log(oldF3.id.split(','))
-
         let splitPos3 = oldF3.id.split(',')
         this.fireball3.getContext('2d').clearRect(0, 0, 50, 50)
         let formattedPos3 = [parseInt(splitPos3[0]) - 1, parseInt(splitPos3[1])]
@@ -393,8 +414,6 @@ class GameView {
     animateFireball4() {
 
         let oldF4 = this.fireball4
-        // console.log(oldF4.id.split(','))
-
         let splitPos4 = oldF4.id.split(',')
         this.fireball4.getContext('2d').clearRect(0, 0, 50, 50)
         let formattedPos4 = [parseInt(splitPos4[0]), parseInt(splitPos4[1]) - 1]
@@ -408,10 +427,27 @@ class GameView {
             this.createCanvasFireball(child4)
         }
     }
+    
+    isGameOver() {
+
+        let cX = this.board.character.positionX
+        let cY = this.board.character.positionY
+
+        if (this.fireball1.id === `${cX},${cY}` ||
+            this.fireball2.id === `${cX},${cY}` ||
+            this.fireball3.id === `${cX},${cY}` ||
+            this.fireball4.id === `${cX},${cY}`) {
+
+            this.resetGame()
+            alert('Game Over!!')
+        } else {
+            return false
+        }
+    }
 
     resetGame() {
         // console.log(this.intervals)
-
+        this.stop()
         window.clearInterval(this.intervals)
         window.clearInterval(this.clear)
         this.gameStarted = false
@@ -420,8 +456,19 @@ class GameView {
     }
 
     play() {
-        const audio = document.getElementById('audio')
-        audio.play();
+        // const audio = document.getElementById('audio')
+        this.audio.play();
+    }
+
+    stop() {
+        // const audio = document.getElementById('audio')
+        this.audio.currentTime = 0
+        this.audio.pause()
+    }
+
+    pause() {
+        // const audio = document.getElementById('audio')
+        this.audio.pause();
     }
 
     removeClasses() {
@@ -442,7 +489,7 @@ class GameView {
                 caEle.id !== this.fireball4.id) {
 
                 caEle.id = ""
-                caEle.getContext('2d').clearRect(0, 0, 30, 30)
+                caEle.getContext('2d').clearRect(0, 0, 50, 50)
             }
         })
     }
@@ -455,7 +502,7 @@ class GameView {
                 caEle.id === this.fireball4.id) {
 
                 caEle.id = ""
-                caEle.getContext('2d').clearRect(0, 0, 30, 30)
+                caEle.getContext('2d').clearRect(0, 0, 50, 50)
             }
         })
 
@@ -471,11 +518,7 @@ class GameView {
 
     damageShield() {
 
-    }
-    
-    shoortProjectiles() {
-
-    }
+    }   
 }
 
 GameView.KEYS = {
