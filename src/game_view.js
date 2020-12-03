@@ -51,8 +51,8 @@ class GameView {
     setupGame() {
 
         this.board = new Board();
-        // this.intervals = ""
-        // this.clear = ""
+        this.intervals = ""
+        this.clear = ""
 
         let html = "";
         for (let i = 0; i < this.board.grid.length; i++) {
@@ -104,7 +104,7 @@ class GameView {
         shieldSprite.onload = (() => {
             ctx.drawImage(shieldSprite, 4, 4, 40, 40)
         })
-        shieldSprite.src = "../images/shield.png"
+        shieldSprite.src = "./images/shield.png"
     }
     
     createShieldedCharacter() {
@@ -346,13 +346,13 @@ class GameView {
         })
 
         if (this.fireball1 === fireball) {
-            fireballSprite.src = "../images/top.png"
+            fireballSprite.src = "./images/top.png"
         } else if (this.fireball2 === fireball) {
-            fireballSprite.src = "../images/left.png"
+            fireballSprite.src = "./images/left.png"
         } else if (this.fireball3 === fireball) {
-            fireballSprite.src = "../images/bottom.png"
+            fireballSprite.src = "./images/bottom.png"
         } else if (this.fireball4 === fireball) {
-            fireballSprite.src = "../images/right.png"
+            fireballSprite.src = "./images/right.png"
         } else {
 
         }
@@ -450,21 +450,9 @@ class GameView {
         window.clearInterval(this.clear)
 
         this.stop()
+        this.removeClasses()
         this.removeFireballs()
         this.setupGame()
-    }
-
-    play() {
-        this.audio.play();
-    }
-
-    stop() {
-        this.audio.currentTime = 0
-        this.audio.pause()
-    }
-
-    pause() {
-        this.audio.pause();
     }
 
     removeClasses() {
@@ -488,6 +476,8 @@ class GameView {
                 caEle.getContext('2d').clearRect(0, 0, 50, 50)
             }
         })
+
+        return true
     }
 
     removeFireballs() {
@@ -506,15 +496,22 @@ class GameView {
         this.fireball2 = ""
         this.fireball3 = ""
         this.fireball4 = ""
+
+        return true
+    }
+    
+    play() {
+        this.audio.play();
     }
 
-    createNewShield() {
-
+    stop() {
+        this.audio.currentTime = 0
+        this.audio.pause()
     }
 
-    damageShield() {
-
-    }   
+    pause() {
+        this.audio.pause();
+    }
 }
 
 GameView.KEYS = {
