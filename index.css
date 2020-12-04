@@ -87,7 +87,7 @@ canvas {
     min-height: 24px;
 }
 
-.shield-hero-game {
+.fireball-hero-game {
     width: 600px;
     height: 600px;
     background: url('./images/floor8x8.jpg');
@@ -97,22 +97,21 @@ canvas {
     background-size: cover;
 }
 
-/* .shield-hero-game button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-} */
-
 .main-screen ul {
     display: flex;
 }
 
 .main-screen ul li {
-    /* display: grid; */
-    /* height: 37.5px;
-    width: 37.5px; */
     height: 75px;
     width: 75px;
+}
+
+#sound-button {
+    background: none;
+    border-style: none;
+    font: inherit;
+    color: white;
+    cursor: pointer;
 }
 
 .right-bar {
@@ -122,5 +121,4 @@ canvas {
 
 .right-bar li {
     height: 33.33%;
-
 }

@@ -12,12 +12,12 @@ class GameView {
         this.fireball3 = ""
         this.fireball4 = ""
 
-        // this.fireballCoordinates = [
-        //     this.fireball1.id, 
-        //     this.fireball2.id, 
-        //     this.fireball3.id, 
-        //     this.fireball4.id
-        // ]
+        this.fireballCoordinates = [
+            this.fireball1.id, 
+            this.fireball2.id, 
+            this.fireball3.id, 
+            this.fireball4.id
+        ]
 
         this.intervals = ""
         this.clear = ""
@@ -28,22 +28,15 @@ class GameView {
         this.waves = 0
 
         this.handleMove = this.handleMove.bind(this);
-        this.playerHit = this.playerHit.bind(this);
-        // this.playerHit2 = this.playerHit2.bind(this);
-        // this.playerHit3 = this.playerHit3.bind(this);
-        // this.playerHit4 = this.playerHit4.bind(this);
         this.isGameOver = this.isGameOver.bind(this);
         this.updateClasses = this.updateClasses.bind(this);
-        this.createShieldedCharacter = this.createShieldedCharacter.bind(this);
+        this.createStarCharacter = this.createStarCharacter.bind(this);
 
         this.generateFireballs = this.generateFireballs.bind(this);
         this.animateFireball1 = this.animateFireball1.bind(this);
         this.animateFireball2 = this.animateFireball2.bind(this);
         this.animateFireball3 = this.animateFireball3.bind(this);
         this.animateFireball4 = this.animateFireball4.bind(this);
-
-        this.generateNewCharacter = this.generateNewCharacter.bind(this);
-        this.generateNewShield = this.generateNewShield.bind(this);
 
         this.resetGame = this.resetGame.bind(this);
         this.removeClasses = this.removeClasses.bind(this);
@@ -77,7 +70,7 @@ class GameView {
                 if (idX === 3 && idY === 4) {
                     html += `<li id=${id} class="character"><canvas id='canvas-character'></canvas></li>`
                 } else if (idX === 3 && idY === 3) {
-                    html += `<li id=${id} class="shield"><canvas id='canvas-shield'></canvas></li>`
+                    html += `<li id=${id} class="star"><canvas id='canvas-star'></canvas></li>`
                 } else {
                     html += `<li id=${id}><canvas></canvas></li>`
                 }
@@ -86,26 +79,13 @@ class GameView {
         }
         this.element.innerHTML = html;
         this.handleScore()
-        this.createCanvasShield();
+        this.createCanvasStar();
         this.createCanvasCharacter();
     }
 
     handleScore() {
         let scoreEle = document.getElementById('game-detail-score')
         scoreEle.innerHTML = `Waves Survived: ${this.waves}`
-    }
-    
-    createCanvasShield() {
-        const canvasShield = document.getElementById('canvas-shield')
-        canvasShield.width = 100;
-        canvasShield.height = 100;
-        
-        const ctx = canvasShield.getContext('2d')
-        const shieldSprite = new Image()
-        shieldSprite.onload = (() => {
-            ctx.drawImage(shieldSprite, 20, 20, 60, 60)
-        })
-        shieldSprite.src = "./images/shield.png"
     }
     
     
@@ -123,29 +103,43 @@ class GameView {
         characterSprite.src = "./images/character.png"
     }
 
-    createShieldedCharacter() {
-        let shieldedCharacterCoordinates = [this.board.character.positionX, this.board.character.positionY];
-        let shieldedCharAtTag = document.getElementById(shieldedCharacterCoordinates);
+    createCanvasStar() {
+        const canvasStar = document.getElementById('canvas-star')
+        canvasStar.width = 100;
+        canvasStar.height = 100;
         
-        shieldedCharAtTag.classList.add('shielded-character');
-        shieldedCharAtTag.firstElementChild.id = 'canvas-shielded-character'
+        const ctx = canvasStar.getContext('2d')
+        const starSprite = new Image()
+        starSprite.onload = (() => {
+            ctx.drawImage(starSprite, 20, 20, 60, 60)
+        })
+        starSprite.src = "./images/star.png"
+    }
+    
+    createStarCharacter() {
+        let starCharacterCoordinates = [this.board.character.positionX, this.board.character.positionY];
+        let starCharAtTag = document.getElementById(starCharacterCoordinates);
         
-        this.createCanvasShieldedCharacter()
+        starCharAtTag.classList.add('star-character');
+        starCharAtTag.firstElementChild.id = 'canvas-star-character'
+        
+        this.board.character.star = this.board.star
+        this.createCanvasStarCharacter()
         this.generateFireballs()
     }
     
-    createCanvasShieldedCharacter() {
-        const canvasShieldedCharacter = document.getElementById('canvas-shielded-character')
-        canvasShieldedCharacter.width = 100;
-        canvasShieldedCharacter.height = 100;
+    createCanvasStarCharacter() {
+        const canvasStarCharacter = document.getElementById('canvas-star-character')
+        canvasStarCharacter.width = 100;
+        canvasStarCharacter.height = 100;
 
-        const ctx = canvasShieldedCharacter.getContext('2d')
+        const ctx = canvasStarCharacter.getContext('2d')
 
-        const shieldedCharacterSprite = new Image()
-        shieldedCharacterSprite.onload = (() => {
-            ctx.drawImage(shieldedCharacterSprite, 8, 8, 90, 90)
+        const starCharacterSprite = new Image()
+        starCharacterSprite.onload = (() => {
+            ctx.drawImage(starCharacterSprite, 8, 8, 90, 90)
         })
-        shieldedCharacterSprite.src = "./images/shielded_character.png"
+        starCharacterSprite.src = "./images/star_character.png"
     }
 
     handleMove(e) {
@@ -155,6 +149,7 @@ class GameView {
 
         if (GameView.KEYS[e.keyCode] === "N") {
             newPos = this.board.character.positionX - 1
+            // if (newPos > 0 && newPos < 15) {
             if (newPos > 0 && newPos < 7) {
                 this.board.character.positionX = newPos
                 
@@ -202,106 +197,120 @@ class GameView {
         this.removeClasses();
         
         let characterCoordinates = [this.board.character.positionX, this.board.character.positionY];
-        let shieldCoordinates = [this.board.shield.positionX, this.board.shield.positionY];
+        let starCoordinates = [this.board.star.positionX, this.board.star.positionY];
         
         let charAtTag = document.getElementById(characterCoordinates);
-        let shieldAtTag = document.getElementById(shieldCoordinates);
+        let starAtTag = document.getElementById(starCoordinates);
         
-        if (JSON.stringify(characterCoordinates) === JSON.stringify(shieldCoordinates)) {
-
-            console.log('shielded = true')
-            this.board.character.shielded = true;
+        if (JSON.stringify(characterCoordinates) === JSON.stringify(starCoordinates)) {
+            this.board.character.star = true;
         }
-
-        if (this.board.character.shielded === false) {
-
-            console.log('shielded = false')
-
-            this.updateCharacter(charAtTag)
-            this.updateShield(shieldAtTag)
+        
+        if (this.board.character.star === false) {
+            this.updateCharAndStar(charAtTag, starAtTag)
         } else {
-            this.createShieldedCharacter()
+            this.createStarCharacter()
         }
     }
-    
-    updateCharacter(charAtTag) {
 
-        console.log("updateChar")
+    updateCharAndStar(charAtTag, starAtTag) {
         charAtTag.classList.add('character');
+        starAtTag.classList.add('star');
+
         charAtTag.firstElementChild.id = 'canvas-character'
+        starAtTag.firstElementChild.id = 'canvas-star'
+
         this.createCanvasCharacter()
+        this.createCanvasStar()
     }
     
-    updateShield(shieldAtTag) {
-
-        console.log("updateShield")
-        shieldAtTag.classList.add('shield');
-        shieldAtTag.firstElementChild.id = 'canvas-shield'
-        this.createCanvasShield()
-    }
-    
-    removeClasses() {
-
-        // removes all li classes
-        document.querySelectorAll('li').forEach(liEle => {
-            if (liEle.classList.contains('character') || 
-                liEle.classList.contains('shield') || 
-                liEle.classList.contains('shielded-character')) {
-
-                liEle.classList.remove('character')
-                liEle.classList.remove('shield')
-                liEle.classList.remove('shielded-character')
-            }
-        })
-
-        // removes all canvas id's that arent' fireballs
-        document.querySelectorAll('canvas').forEach(caEle => {
-            if (caEle.id !== this.fireball1.id && 
-                caEle.id !== this.fireball2.id &&
-                caEle.id !== this.fireball3.id &&
-                caEle.id !== this.fireball4.id) {
-
-                caEle.id = ""
-                // caEle.getContext('2d').clearRect(0, 0, 50, 50)
-                caEle.getContext('2d').clearRect(0, 0, 100, 100)
-            }
-        })
+    reroll(n) {
+        let roll = Math.floor(Math.random(0) * 7) + 1;
+        return roll === n ? this.reroll(n) : roll
     }
 
     generateFireballs() {
 
-        document.getElementById('sound-button').value === "muted" ? this.pause() : this.play()
+        this.play()
+
+        const soundButton = document.getElementById('sound-button');
+        if (soundButton.value === "muted") {
+            this.pause()
+        }
 
         if (!this.gameStarted) {
             this.gameStarted = true
 
-            this.setupFireballs()
+            let roll1 = Math.floor(Math.random() * 7) + 1;
+            let roll2 = Math.floor(Math.random() * 7) + 1;
+            let roll3 = Math.floor(Math.random() * 7) + 1;
+            let roll4 = Math.floor(Math.random() * 7) + 1;
+            let rerollArr = [roll1, roll2, roll3, roll4]
+            
+            for (let i = 0; i < rerollArr.length; i++) {
+                for (let j = 0; j < rerollArr.length; j++) {
+                    if (i !== j && rerollArr[i] === rerollArr[j]) {
+                        rerollArr[i] = this.reroll(rerollArr[i])
+                    }
+                }
+            }
+
+            roll1 = rerollArr[0]
+            roll2 = rerollArr[1]
+            roll3 = rerollArr[2]
+            roll4 = rerollArr[3]
+
+            // top
+            let randomPos1 = [0, (roll1)];
+            let ele1 = document.getElementById(randomPos1)
+            let fireball1 = ele1.firstElementChild
+            fireball1.id = randomPos1
+
+            this.fireball1 = fireball1
+            this.createCanvasFireball(fireball1)
+            
+            //left
+            let randomPos2 = [(roll2), 0];
+            let ele2 = document.getElementById(randomPos2)
+            let fireball2 = ele2.firstElementChild
+            fireball2.id = randomPos2
+
+            this.fireball2 = fireball2
+            this.createCanvasFireball(fireball2)
+            
+            // bottom
+            let randomPos3 = [7, (roll3)];
+            let ele3 = document.getElementById(randomPos3)
+            let fireball3 = ele3.firstElementChild
+            fireball3.id = randomPos3
+
+            this.fireball3 = fireball3
+            this.createCanvasFireball(fireball3)
+            
+            // right
+            let randomPos4 = [(roll4), 7];
+            let ele4 = document.getElementById(randomPos4)
+            let fireball4 = ele4.firstElementChild
+            fireball4.id = randomPos4
+
+            this.fireball4 = fireball4
+            this.createCanvasFireball(fireball4)
             
             this.intervals = window.setInterval(() => {
-
                 if (this.fireball1.id.split(',')[0] === "7" ||
                     this.fireball2.id.split(',')[1] === "7" || 
                     this.fireball3.id.split(',')[0] === "0" || 
                     this.fireball4.id.split(',')[1] === "0") {
 
                     document.querySelectorAll('canvas').forEach(caEle => {
+                        if (caEle.id === this.fireball1.id || 
+                            caEle.id === this.fireball2.id ||
+                            caEle.id === this.fireball3.id ||
+                            caEle.id === this.fireball4.id) {
 
-                        if (caEle.id === this.fireball1.id) {
+                            caEle.id = ""
                             caEle.getContext('2d').clearRect(0, 0, 100, 100)
                         }
-
-                        if (caEle.id === this.fireball2.id) {
-                            caEle.getContext('2d').clearRect(0, 0, 100, 100)
-                        }
-
-                        if (caEle.id === this.fireball3.id) {
-                            caEle.getContext('2d').clearRect(0, 0, 100, 100)
-                        }
-
-                        if (caEle.id === this.fireball4.id) {
-                            caEle.getContext('2d').clearRect(0, 0, 100, 100)
-                        }
-
                     });
 
                     this.gameStarted = false
@@ -317,74 +326,13 @@ class GameView {
                         this.animateFireball4()
                     }
                 }
-            }, 1000)
+            }, 500)
 
             this.clear = window.setInterval(() => {
                 window.clearInterval(this.intervals)
-            }, (1000*8));
-        }
-    }
-
-    reroll(n) {
-        let roll = Math.floor(Math.random(0) * 7) + 1;
-        return roll === n ? this.reroll(n) : roll
-    }
-
-    setupFireballs() {
-        let roll1 = Math.floor(Math.random() * 7) + 1;
-        let roll2 = Math.floor(Math.random() * 7) + 1;
-        let roll3 = Math.floor(Math.random() * 7) + 1;
-        let roll4 = Math.floor(Math.random() * 7) + 1;
-        let rerollArr = [roll1, roll2, roll3, roll4]
-        
-        for (let i = 0; i < rerollArr.length; i++) {
-            for (let j = 0; j < rerollArr.length; j++) {
-                if (i !== j && rerollArr[i] === rerollArr[j]) {
-                    rerollArr[i] = this.reroll(rerollArr[i])
-                }
-            }
+            }, 4000);
         }
 
-        roll1 = rerollArr[0]
-        roll2 = rerollArr[1]
-        roll3 = rerollArr[2]
-        roll4 = rerollArr[3]
-
-        // top
-        let randomPos1 = [0, (roll1)];
-        let ele1 = document.getElementById(randomPos1)
-        let fireball1 = ele1.firstElementChild
-        fireball1.id = randomPos1
-
-        this.fireball1 = fireball1
-        this.createCanvasFireball(fireball1)
-        
-        //left
-        let randomPos2 = [(roll2), 0];
-        let ele2 = document.getElementById(randomPos2)
-        let fireball2 = ele2.firstElementChild
-        fireball2.id = randomPos2
-
-        this.fireball2 = fireball2
-        this.createCanvasFireball(fireball2)
-        
-        // bottom
-        let randomPos3 = [7, (roll3)];
-        let ele3 = document.getElementById(randomPos3)
-        let fireball3 = ele3.firstElementChild
-        fireball3.id = randomPos3
-
-        this.fireball3 = fireball3
-        this.createCanvasFireball(fireball3)
-        
-        // right
-        let randomPos4 = [(roll4), 7];
-        let ele4 = document.getElementById(randomPos4)
-        let fireball4 = ele4.firstElementChild
-        fireball4.id = randomPos4
-
-        this.fireball4 = fireball4
-        this.createCanvasFireball(fireball4)
     }
 
     createCanvasFireball(fireball) {
@@ -412,9 +360,6 @@ class GameView {
     }
 
     animateFireball1() {
-
-        let cX = this.board.character.positionX
-        let cY = this.board.character.positionY
         
         let oldF1 = this.fireball1.id.split(',')
         let formattedPos1 = [parseInt(oldF1[0]) + 1, parseInt(oldF1[1])]
@@ -424,22 +369,13 @@ class GameView {
 
         this.fireball1.getContext('2d').clearRect(0, 0, 100, 100)
         this.fireball1 = child1
-
-        if (this.fireball1) {
-            if (this.playerHit(cX, cY, this.fireball1)) {
-                this.fireball1.getContext('2d').clearRect(0, 0, 100, 100)
-            }
-    
-            if (!this.isGameOver(cX, cY)) {
-                this.createCanvasFireball(child1)
-            }
+        
+        if (!this.isGameOver()) {
+            this.createCanvasFireball(child1)
         }
     }
 
     animateFireball2() {
-
-        let cX = this.board.character.positionX
-        let cY = this.board.character.positionY
         
         let oldF2 = this.fireball2.id.split(',')
         let formattedPos2 = [parseInt(oldF2[0]), parseInt(oldF2[1]) + 1]
@@ -449,20 +385,13 @@ class GameView {
 
         this.fireball2.getContext('2d').clearRect(0, 0, 100, 100)
         this.fireball2 = child2
-        
-        if (this.playerHit(cX, cY, this.fireball2)) {
-            this.fireball2.getContext('2d').clearRect(0, 0, 100, 100)
-        }
 
-        if (!this.isGameOver(cX, cY)) {
+        if (!this.isGameOver()) {
             this.createCanvasFireball(child2)
         }
     }
 
     animateFireball3() {
-
-        let cX = this.board.character.positionX
-        let cY = this.board.character.positionY
         
         let oldF3 = this.fireball3.id.split(',')
         let formattedPos3 = [parseInt(oldF3[0]) - 1, parseInt(oldF3[1])]
@@ -472,20 +401,13 @@ class GameView {
 
         this.fireball3.getContext('2d').clearRect(0, 0, 100, 100)
         this.fireball3 = child3
-        
-        if (this.playerHit(cX, cY, this.fireball3)) {
-            this.fireball3.getContext('2d').clearRect(0, 0, 100, 100)
-        }
 
-        if (!this.isGameOver(cX, cY)) {
+        if (!this.isGameOver()) {
             this.createCanvasFireball(child3)
         }
     }
 
     animateFireball4() {
-
-        let cX = this.board.character.positionX
-        let cY = this.board.character.positionY
         
         let oldF4 = this.fireball4.id.split(',')
         let formattedPos4 = [parseInt(oldF4[0]), parseInt(oldF4[1]) - 1]
@@ -495,75 +417,24 @@ class GameView {
 
         this.fireball4.getContext('2d').clearRect(0, 0, 100, 100)
         this.fireball4 = child4
-        
-        if (this.playerHit(cX, cY, this.fireball4)) {
-            this.fireball4.getContext('2d').clearRect(0, 0, 100, 100)
-        }
 
-        if (!this.isGameOver(cX, cY)) {
+        if (!this.isGameOver()) {
             this.createCanvasFireball(child4)
         }
     }
-
-    playerHit(cX, cY, fireball) {
-
-        let id = fireball.id
-        let charId = `${cX},${cY}`
-        let sHealth = this.board.shield.health
-        let shielded = this.board.character.shielded
-
-        if (id === charId && sHealth !== 0 && shielded) {
-            this.board.character.shielded = false
-            this.board.shield.health = 0
-            this.generateNewCharacter()
-            this.generateNewShield()
-            return true
-        } 
-    }
     
-    generateNewCharacter() {
-        let shieldedCharacterCoordinates = [this.board.character.positionX, this.board.character.positionY];
-        let shieldedCharAtTag = document.getElementById(shieldedCharacterCoordinates);
-        
-        shieldedCharAtTag.classList.remove('shielded-character');
-        shieldedCharAtTag.classList.add('character');
-        shieldedCharAtTag.firstElementChild.id = 'canvas-character'
-        shieldedCharAtTag.firstElementChild.getContext('2d').clearRect(0, 0 , 100, 100)
-        this.createCanvasCharacter()
-    }
+    isGameOver() {
 
-    generateNewShield() {
-        let newX = Math.floor(Math.random() * 6) + 1
-        this.board.shield.positionX = newX
-        let newY = Math.floor(Math.random() * 6) + 1
-        this.board.shield.positionY = newY
-        let newShieldPos = [newX, newY]
+        let cX = this.board.character.positionX
+        let cY = this.board.character.positionY
 
-        let charPosX = this.board.character.positionX
-        let charPosY = this.board.character.positionY
-        let charPos = [charPosX, charPosY]
-
-        while (JSON.stringify(newShieldPos) === JSON.stringify(charPos)) {
-            newShieldPos[0] = this.reroll(newShieldPos[0])
-            newShieldPos[1] = this.reroll(newShieldPos[1])
-        }
-
-        let newShieldTag = document.getElementById(newShieldPos)
-        newShieldTag.classList.add('shield')
-        newShieldTag.firstElementChild.id = ('canvas-shield')
-        this.createCanvasShield()
-    }
-    
-    isGameOver(cX, cY) {
-
-        if (this.fireball1.id === `${cX},${cY}` && this.board.shield.health === 0 ||
-            this.fireball2.id === `${cX},${cY}` && this.board.shield.health === 0 ||
-            this.fireball3.id === `${cX},${cY}` && this.board.shield.health === 0 ||
-            this.fireball4.id === `${cX},${cY}` && this.board.shield.health === 0) {
+        if (this.fireball1.id === `${cX},${cY}` ||
+            this.fireball2.id === `${cX},${cY}` ||
+            this.fireball3.id === `${cX},${cY}` ||
+            this.fireball4.id === `${cX},${cY}`) {
 
             this.resetGame()
             alert('Game Over!!')
-
         } else {
             return false
         }
@@ -582,6 +453,31 @@ class GameView {
         this.setupGame()
     }
 
+    removeClasses() {
+        document.querySelectorAll('li').forEach(liEle => {
+            if (liEle.classList.contains('character') || 
+                liEle.classList.contains('star') || 
+                liEle.classList.contains('star-character')) {
+
+                liEle.classList.remove('character')
+                liEle.classList.remove('star')
+                liEle.classList.remove('star-character')
+            }
+        })
+        document.querySelectorAll('canvas').forEach(caEle => {
+            if (caEle.id !== this.fireball1.id && 
+                caEle.id !== this.fireball2.id &&
+                caEle.id !== this.fireball3.id &&
+                caEle.id !== this.fireball4.id) {
+
+                caEle.id = ""
+                caEle.getContext('2d').clearRect(0, 0, 100, 100)
+            }
+        })
+
+        return true
+    }
+
     removeFireballs() {
         document.querySelectorAll('canvas').forEach(caEle => {
             if (caEle.id === this.fireball1.id || 
@@ -590,7 +486,6 @@ class GameView {
                 caEle.id === this.fireball4.id) {
 
                 caEle.id = ""
-                // caEle.getContext('2d').clearRect(0, 0, 50, 50)
                 caEle.getContext('2d').clearRect(0, 0, 100, 100)
             }
         })
@@ -599,6 +494,8 @@ class GameView {
         this.fireball2 = ""
         this.fireball3 = ""
         this.fireball4 = ""
+
+        return true
     }
     
     play() {
