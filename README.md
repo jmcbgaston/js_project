@@ -1,5 +1,5 @@
 # Shield Hero
-![LIVE](https://jmcbgaston.github.io/shield_hero/)
+[Live Link](https://jmcbgaston.github.io/fireball_hero/)
 
 - Instructions on how to play/interact with the project.
 ### Instructions
